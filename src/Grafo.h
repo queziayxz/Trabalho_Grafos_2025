@@ -13,7 +13,7 @@
 using namespace std;
 class Grafo {
 public:
-    Grafo();
+    Grafo(char* fileName);
     ~Grafo();
 
     vector<char> fecho_transitivo_direto(int id_no); // a

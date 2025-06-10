@@ -5,7 +5,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     if(argc >= 2) {
-        Grafo* grafo = new Grafo();
+        Grafo* grafo = new Grafo(argv[1]);
     
         Gerenciador::comandos(grafo);
     } else {

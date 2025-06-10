@@ -1,7 +1,23 @@
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <cstring>
+
 #include "Grafo.h"
 
 
-Grafo::Grafo() {
+Grafo::Grafo(char* fileName) {
+    ifstream ifs;
+    filesystem::path path = std::filesystem::current_path();
+    filesystem::path relative = "../insinstancias/grafo01.txt";
+    filesystem::path fullPath = path / relative;
+    cout << "path: " << fullPath << endl;
+    ifs.open(path, ios_base::in);
+    if(ifs.is_open()) {
+        cout << "abriu" << endl;
+    } else {
+        cout << "nao abriu" << endl;
+    }
 }
 
 Grafo::~Grafo() {
