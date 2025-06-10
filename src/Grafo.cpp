@@ -2,21 +2,38 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
+#include <regex>
 
 #include "Grafo.h"
 
 
 Grafo::Grafo(char* fileName) {
     ifstream ifs;
+    ifs.exceptions(std::ios::badbit | std::ios::failbit);
+
+    char relative[50] = "../instancias/";
+    std::string line;
+    int i = 0;
+
+    strcat(relative,fileName);
     filesystem::path path = std::filesystem::current_path();
-    filesystem::path relative = "../insinstancias/grafo01.txt";
     filesystem::path fullPath = path / relative;
-    cout << "path: " << fullPath << endl;
-    ifs.open(path, ios_base::in);
-    if(ifs.is_open()) {
-        cout << "abriu" << endl;
-    } else {
-        cout << "nao abriu" << endl;
+
+    try {
+        ifs.open(fullPath, ios_base::in);
+        if(ifs.is_open()) {
+            getline(ifs,line); //le a primeira linha
+            _tokenizationDAV(line); // guarda informacao de ser direcionado,poderado aresta ou vertice
+            getline(ifs,line); // le segunda linha com a ordem do grafo
+            _tokenizationOrdem(line); // transforma em inteiro a ordem do grafo
+            _tokenizationVertices(ifs); // le os vertices do arquivo e armazena na lista de adjacencia
+        } else {
+            cout << "nao abriu" << endl;
+        }
+        ifs.close();
+    } catch(const ios_base::failure& e) {
+        cout << "erro ao abrir o arquivo para leitura" << endl;
+        ifs.close();
     }
 }
 
@@ -81,4 +98,56 @@ vector<char> Grafo::periferia() {
 vector<char> Grafo::vertices_de_articulacao() {
     cout<<"Metodo nao implementado"<<endl;
     return {};
+}
+
+void Grafo::_tokenizationDAV(string line)
+{
+    int i = 0;
+    regex del(" ");
+    sregex_token_iterator it(line.begin(), line.end(), del, -1); 
+    sregex_token_iterator end;
+    while (it != end) {
+        switch(i) {
+            case 0:
+                this->in_direcionado = *it == '0' ? false : true;
+                break;
+            case 1: 
+                this->in_ponderado_aresta = *it == '0' ? false : true;
+                break;
+            case 2:
+                this->in_ponderado_vertice = *it == '0' ? false : true;
+                break;
+        }
+        i++;
+        it++;
+    }
+    cout << "direcionado: " << this->in_direcionado << endl;
+    cout << "in_aresta: " << this->in_ponderado_aresta << endl;
+    cout << "in_vertice: " << this->in_ponderado_vertice << endl;
+}
+
+void Grafo::_tokenizationOrdem(string line)
+{
+    regex reg("[^0-9]");
+    string field = regex_replace(line,reg,"");
+    this->ordem = field.empty() ? 0 : std::stoi(field);
+    cout << "ordem: " << this->ordem << endl;
+    
+}
+
+void Grafo::_tokenizationVertices(ifstream& ifs)
+{
+    string line;
+    if(this->in_ponderado_vertice) {
+
+    } else {
+        for(int i = 0; i < this->ordem; i++) {
+            getline(ifs,line);
+            No* vertice = new No();
+            vertice->id = line[0];
+            vertice->peso = 0;
+            this->lista_adj.push_back(vertice);
+        }
+        cout << "vertice 3: " << this->lista_adj.at(2)->id << endl;
+    }
 }

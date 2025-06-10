@@ -12,6 +12,11 @@
 
 using namespace std;
 class Grafo {
+    private:
+        void _tokenizationDAV(string line);
+        void _tokenizationOrdem(string line);
+        void _tokenizationVertices(ifstream& ifs);
+
 public:
     Grafo(char* fileName);
     ~Grafo();
