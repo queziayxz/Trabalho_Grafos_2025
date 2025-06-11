@@ -9,7 +9,7 @@
 
 Grafo::Grafo(char* fileName) {
     ifstream ifs;
-    ifs.exceptions(std::ios::badbit | std::ios::failbit);
+    ifs.exceptions(std::ios::badbit);
 
     char relative[50] = "../instancias/";
     std::string line;
@@ -27,6 +27,7 @@ Grafo::Grafo(char* fileName) {
             getline(ifs,line); // le segunda linha com a ordem do grafo
             _tokenizationOrdem(line); // transforma em inteiro a ordem do grafo
             _tokenizationVertices(ifs); // le os vertices do arquivo e armazena na lista de adjacencia
+            _tokenizationArestas(ifs); // le as arestas e armazena na lista de adjacencia em cada no
         } else {
             cout << "nao abriu" << endl;
         }
@@ -130,7 +131,7 @@ void Grafo::_tokenizationOrdem(string line)
 {
     regex reg("[^0-9]");
     string field = regex_replace(line,reg,"");
-    this->ordem = field.empty() ? 0 : std::stoi(field);
+    this->ordem = field.empty() ? 0 : stoi(field);
     cout << "ordem: " << this->ordem << endl;
     
 }
@@ -138,16 +139,34 @@ void Grafo::_tokenizationOrdem(string line)
 void Grafo::_tokenizationVertices(ifstream& ifs)
 {
     string line;
-    if(this->in_ponderado_vertice) {
-
-    } else {
-        for(int i = 0; i < this->ordem; i++) {
-            getline(ifs,line);
-            No* vertice = new No();
-            vertice->id = line[0];
-            vertice->peso = 0;
-            this->lista_adj.push_back(vertice);
-        }
-        cout << "vertice 3: " << this->lista_adj.at(2)->id << endl;
+    for(int i = 0; i < this->ordem; i++) {
+        getline(ifs,line);
+        No* vertice = new No();
+        vertice->id = line[0];
+        vertice->peso = this->in_ponderado_vertice ? stoi(line.substr(2)) : 0;
+        this->lista_adj.push_back(vertice);
     }
+    cout << "vertice 3 - id: " << this->lista_adj.at(2)->id << endl;
+    cout << "vertice 3 - peso: " << this->lista_adj.at(2)->peso << endl;
+}
+
+void Grafo::_tokenizationArestas(ifstream& ifs)
+{
+    string line;
+    while(getline(ifs,line)) {
+        for(No* no : this->lista_adj) {
+            if(no->id == line[0]) {
+                Aresta* aresta = new Aresta();
+                aresta->id_no_alvo = line[2];
+                aresta->peso = this->in_ponderado_aresta ? stoi(line.substr(3)) : 0;
+                no->arestas.push_back(aresta);
+            }
+        }
+    }
+
+    cout << "vertices vizinhos de " << this->lista_adj[0]->id << ": ";
+    for(Aresta* ares : this->lista_adj[0]->arestas) {
+        cout << ares->id_no_alvo << ", ";
+    }
+    cout << endl;
 }
