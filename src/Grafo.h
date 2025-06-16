@@ -20,6 +20,7 @@ class Grafo {
 
 public:
     Grafo(char* fileName);
+    Grafo();
     ~Grafo();
 
     vector<char> fecho_transitivo_direto(int id_no); // a

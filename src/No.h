@@ -14,6 +14,7 @@ public:
 
     char id;
     int peso;
+    bool visitado;
     vector<Aresta*> arestas;
 };
 

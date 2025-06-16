@@ -6,6 +6,10 @@
 
 #include "Grafo.h"
 
+Grafo::Grafo()
+{
+
+}
 
 Grafo::Grafo(char* fileName) {
     ifstream ifs;
@@ -29,11 +33,12 @@ Grafo::Grafo(char* fileName) {
             _tokenizationVertices(ifs); // le os vertices do arquivo e armazena na lista de adjacencia
             _tokenizationArestas(ifs); // le as arestas e armazena na lista de adjacencia em cada no
         } else {
-            cout << "nao abriu" << endl;
+            ifs.close();
+            throw ios_base::failure("erro ao abrir o arquivo, informe um arquivo dentro de /instancias");
         }
         ifs.close();
     } catch(const ios_base::failure& e) {
-        cout << "erro ao abrir o arquivo para leitura" << endl;
+        throw ios_base::failure("erro ao abrir o arquivo");
         ifs.close();
     }
 }
@@ -72,7 +77,18 @@ Grafo * Grafo::arvore_geradora_minima_kruskal(vector<char> ids_nos) {
 }
 
 Grafo * Grafo::arvore_caminhamento_profundidade(int id_no) {
-    cout<<"Metodo nao implementado"<<endl;
+    Grafo* grafo = new Grafo();
+    cout << "lista adjacencia:" << endl;
+    for(No* no : this->lista_adj) {
+        // if(no->id == id_no) {       
+            cout << no->id << " | ";     
+            for(Aresta* aresta : no->arestas) {
+                cout << aresta->id_no_alvo << " -> ";
+            }
+        // }
+
+        cout << endl;
+    }
     return nullptr;
 }
 
@@ -144,12 +160,17 @@ void Grafo::_tokenizationVertices(ifstream& ifs)
         No* vertice = new No();
         vertice->id = line[0];
         vertice->peso = this->in_ponderado_vertice ? stoi(line.substr(2)) : 0;
+        vertice->visitado = false;
         this->lista_adj.push_back(vertice);
     }
     cout << "vertice 3 - id: " << this->lista_adj.at(2)->id << endl;
     cout << "vertice 3 - peso: " << this->lista_adj.at(2)->peso << endl;
 }
 
+/*
+* * Matodo responsavel por realizar o token do arquivo e separar as arestas de cada no
+* TODO: Realizar verificacoes para grafos direcionados
+*/
 void Grafo::_tokenizationArestas(ifstream& ifs)
 {
     string line;
@@ -160,6 +181,16 @@ void Grafo::_tokenizationArestas(ifstream& ifs)
                 aresta->id_no_alvo = line[2];
                 aresta->peso = this->in_ponderado_aresta ? stoi(line.substr(3)) : 0;
                 no->arestas.push_back(aresta);
+                if(!this->in_direcionado) {
+                    for(No* n : this->lista_adj) {
+                        if(n->id == line[2]) {
+                            Aresta* ares = new Aresta();
+                            ares->id_no_alvo = no->id;
+                            ares->peso = this->in_ponderado_aresta ? stoi(line.substr(3)) : 0;
+                            n->arestas.push_back(ares);
+                        }
+                    }
+                }
             }
         }
     }
