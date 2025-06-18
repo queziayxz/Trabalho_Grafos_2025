@@ -15,16 +15,14 @@ Grafo::Grafo(char* fileName) {
     ifstream ifs;
     ifs.exceptions(std::ios::badbit);
 
-    char relative[50] = "../instancias/";
+    char relative[50] = "instancias/";
     std::string line;
     int i = 0;
 
     strcat(relative,fileName);
-    filesystem::path path = std::filesystem::current_path();
-    filesystem::path fullPath = path / relative;
 
     try {
-        ifs.open(fullPath, ios_base::in);
+        ifs.open(relative, ios_base::in);
         if(ifs.is_open()) {
             getline(ifs,line); //le a primeira linha
             _tokenizationDAV(line); // guarda informacao de ser direcionado,poderado aresta ou vertice
