@@ -75,16 +75,52 @@ Grafo * Grafo::arvore_geradora_minima_kruskal(vector<char> ids_nos) {
 
 Grafo * Grafo::arvore_caminhamento_profundidade(int id_no) {
     Grafo* grafo = new Grafo();
-    cout << "lista adjacencia:" << endl;
-    for(No* no : this->lista_adj) {
-        // if(no->id == id_no) {       
-            cout << no->id << " | ";     
-            for(Aresta* aresta : no->arestas) {
-                cout << aresta->id_no_alvo << " -> ";
-            }
-        // }
+    grafo->ordem = 0;
+    grafo->in_direcionado = this->in_direcionado;
+    grafo->in_ponderado_aresta = this->in_ponderado_aresta;
+    grafo->in_ponderado_vertice = this->in_ponderado_vertice;
 
-        cout << endl;
+    Grafo* H = new Grafo();
+    H->ordem = 0;
+
+    // cout << "size: inicio " << this->lista_adj.size() << endl;
+    
+    // cout << "lista adjacencia:" << endl;
+    for(No* no : this->lista_adj) {
+        // cout << no->id << " ";
+        if(no->id == id_no) {
+            no->visitado = true;
+            // cout << no->id << " | ";
+            No* noAux = new No();
+            noAux->id = id_no;
+            noAux->peso = no->peso;
+            noAux->visitado = true;
+            grafo->ordem++;
+            grafo->lista_adj.push_back(noAux);
+
+            // cout << "size arestas: " << no->arestas.size() << endl;
+            for(Aresta* aresta : no->arestas) {
+                No* vertice = getNoForId(aresta->id_no_alvo);
+                if(vertice == nullptr) return nullptr;
+                if(vertice->visitado) continue;
+
+                // vertice->visitado = true;
+
+                H = arvore_caminhamento_profundidade(vertice->id);
+                
+                int index = grafo->lista_adj.size();
+                grafo->lista_adj.insert(grafo->lista_adj.end(), H->lista_adj.begin(), H->lista_adj.end());
+                Aresta* are = new Aresta();
+                are->id_no_alvo = grafo->lista_adj[index]->id;
+                are->peso = 0;
+                grafo->lista_adj[0]->arestas.push_back(are);
+            }
+
+            return grafo;
+
+        }
+
+        // cout << endl;
     }
     return nullptr;
 }
@@ -118,14 +154,14 @@ void Grafo::_tokenizationDAV(string line)
 {
     int i = 0;
     regex del(" ");
-    sregex_token_iterator it(line.begin(), line.end(), del, -1); 
+    sregex_token_iterator it(line.begin(), line.end(), del, -1);
     sregex_token_iterator end;
     while (it != end) {
         switch(i) {
             case 0:
                 this->in_direcionado = *it == '0' ? false : true;
                 break;
-            case 1: 
+            case 1:
                 this->in_ponderado_aresta = *it == '0' ? false : true;
                 break;
             case 2:
@@ -146,7 +182,7 @@ void Grafo::_tokenizationOrdem(string line)
     string field = regex_replace(line,reg,"");
     this->ordem = field.empty() ? 0 : stoi(field);
     cout << "ordem: " << this->ordem << endl;
-    
+
 }
 
 void Grafo::_tokenizationVertices(ifstream& ifs)
@@ -197,4 +233,20 @@ void Grafo::_tokenizationArestas(ifstream& ifs)
         cout << ares->id_no_alvo << ", ";
     }
     cout << endl;
+}
+
+No* Grafo::getNoForId(int id_no)
+{
+    for(No* no : this->lista_adj) {
+        if(no->id == id_no) return no;
+    }
+
+    return nullptr;
+}
+
+void Grafo::naoVisitado()
+{
+    for(No* no : this->lista_adj) {
+        no->visitado = false;
+    }
 }

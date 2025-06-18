@@ -127,8 +127,14 @@ void Gerenciador::comandos(Grafo* grafo) {
         case 'g': {
 
             char id_no = get_id_entrada();
+            grafo->naoVisitado();
             Grafo* arvore_caminhamento_profundidade = grafo->arvore_caminhamento_profundidade(id_no);
-            cout<<"Metodo de impressao em tela nao implementado"<<endl<<endl;
+            // cout<<"Metodo de impressao em tela nao implementado"<<endl<<endl;
+
+            cout << "caminhamento em profuncidade" << endl;
+            for(No* no : arvore_caminhamento_profundidade->lista_adj) {
+                cout << no->id << " ";
+            }
 
             if(pergunta_imprimir_arquivo("arvore_caminhamento_profundidade.txt")) {
                 cout<<"Metodo de impressao em arquivo nao implementado"<<endl;
