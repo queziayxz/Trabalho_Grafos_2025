@@ -34,7 +34,7 @@ void Gerenciador::comandos(Grafo *grafo)
         }
         else
         {
-            cout << fecho_transitivo_direto.size() << " no(s) no fecho transitivo direto!" << endl;
+            cout << "Ha " << fecho_transitivo_direto.size() << " no(s) no fecho transitivo direto!" << endl;
             cout << "O fecho eh dado por: [ ";
             for (char id : fecho_transitivo_direto)
             {
@@ -69,7 +69,7 @@ void Gerenciador::comandos(Grafo *grafo)
         }
         else
         {
-            cout << fecho_transitivo_indireto.size() << " no(s) no fecho transitivo indireto!" << endl;
+            cout << "Ha "<< fecho_transitivo_indireto.size() << " no(s) no fecho transitivo indireto!" << endl;
             cout << "O fecho eh dado por: [ ";
             for (char id : fecho_transitivo_indireto)
             {
@@ -187,7 +187,7 @@ void Gerenciador::comandos(Grafo *grafo)
         Grafo *arvore_caminhamento_profundidade = grafo->arvore_caminhamento_profundidade(id_no);
         // cout<<"Metodo de impressao em tela nao implementado"<<endl<<endl;
 
-        cout << "caminhamento em profuncidade" << endl;
+        cout << "caminhamento em profundidade" << endl;
         for (No *no : arvore_caminhamento_profundidade->lista_adj)
         {
             cout << no->id << " ";

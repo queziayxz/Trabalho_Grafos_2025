@@ -50,20 +50,8 @@ Grafo::~Grafo()
 {
 }
 
-vector<char> Grafo::fecho_transitivo_direto(int id_no)
+void Grafo::fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado)
 {
-
-    set<char> visitados;
-    vector<char> resultado;
-    fecho_transitivo_direto_rec(id_no, visitados, resultado);
-    resultado.erase(remove(resultado.begin(), resultado.end(), id_no), resultado.end());
-
-    return resultado;
-}
-
-void Grafo::fecho_transitivo_direto_rec(char id, set<char> &visitados, vector<char> &resultado)
-{
-
     if (visitados.count(id))
         return;
 
@@ -76,10 +64,12 @@ void Grafo::fecho_transitivo_direto_rec(char id, set<char> &visitados, vector<ch
 
     for (Aresta *aresta : no->arestas)
     {
-        fecho_transitivo_direto_rec(aresta->id_no_alvo, visitados, resultado);
+        fecho_busca_em_profundidade(aresta->id_no_alvo, visitados, resultado);
     }
 }
 
+//Função que transpõe o grafo, ou seja, inverte as arestas para que possa auxiliar o cálculo do fecho transitivo indireto.
+//rever para caso de arestas nao direcionadas
 Grafo *Grafo::transpor_grafo()
 {
 
@@ -116,13 +106,25 @@ Grafo *Grafo::transpor_grafo()
     return grafo_transposto;
 }
 
+vector<char> Grafo::fecho_transitivo_direto(int id_no)
+{
+
+    set<char> visitados;
+    vector<char> resultado;
+    
+    fecho_busca_em_profundidade(id_no, visitados, resultado);
+    resultado.erase(remove(resultado.begin(), resultado.end(), id_no), resultado.end());
+
+    return resultado;
+}
+
 vector<char> Grafo::fecho_transitivo_indireto(int id_no)
 {
 
     set<char> visitados;
     vector<char> resultado;
 
-    fecho_transitivo_direto_rec(id_no, visitados, resultado);
+    fecho_busca_em_profundidade(id_no, visitados, resultado);
     resultado.erase(remove(resultado.begin(), resultado.end(), id_no), resultado.end());
 
     return resultado;

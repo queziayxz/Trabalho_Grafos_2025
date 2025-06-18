@@ -33,7 +33,7 @@ public:
     Grafo* arvore_geradora_minima_prim(vector<char> ids_nos); // e
     Grafo* arvore_geradora_minima_kruskal(vector<char> ids_nos); // f
     Grafo* arvore_caminhamento_profundidade(int id_no); // g
-    void fecho_transitivo_direto_rec(char id, set<char>& visitados, vector<char>& resultado);
+    void fecho_busca_em_profundidade(char id, set<char>& visitados, vector<char>& resultado);
     Grafo *transpor_grafo();
     int raio();     // h 1
     int diametro(); // h 2
