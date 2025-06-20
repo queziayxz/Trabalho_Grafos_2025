@@ -2,8 +2,8 @@
 #include <sstream>
 #include <cstring>
 #include <regex>
-
 #include "Grafo.h"
+#include <climits>
 
 Grafo::Grafo()
 {
@@ -48,64 +48,13 @@ Grafo::Grafo(char *fileName)
 
 Grafo::~Grafo()
 {
+
 }
 
-void Grafo::fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado)
-{
-    if (visitados.count(id))
-        return;
 
-    visitados.insert(id);
-    resultado.push_back(id);
+// ************* Fecho transitivo direto e indireto *************
 
-    No *no = getNoForId(id);
-    if (!no)
-        return;
-
-    for (Aresta *aresta : no->arestas)
-    {
-        fecho_busca_em_profundidade(aresta->id_no_alvo, visitados, resultado);
-    }
-}
-
-//Função que transpõe o grafo, ou seja, inverte as arestas para que possa auxiliar o cálculo do fecho transitivo indireto.
-//rever para caso de arestas nao direcionadas
-Grafo *Grafo::transpor_grafo()
-{
-
-    Grafo *grafo_transposto = new Grafo();
-    grafo_transposto->ordem = this->ordem;
-    grafo_transposto->in_direcionado = this->in_direcionado;
-    grafo_transposto->in_ponderado_aresta = this->in_ponderado_aresta;
-    grafo_transposto->in_ponderado_vertice = this->in_ponderado_vertice;
-
-    for (No *no : this->lista_adj)
-    {
-        No *novo_no = new No();
-        novo_no->id = no->id;
-        novo_no->peso = no->peso;
-        novo_no->visitado = false;
-        grafo_transposto->lista_adj.push_back(novo_no);
-    }
-
-    for (No *no : this->lista_adj)
-    {
-        for (Aresta *aresta : no->arestas)
-        {
-            No *alvo = grafo_transposto->getNoForId(aresta->id_no_alvo);
-            if (alvo)
-            {
-                Aresta *nova_aresta = new Aresta();
-                nova_aresta->id_no_alvo = no->id;
-                nova_aresta->peso = aresta->peso;
-                alvo->arestas.push_back(nova_aresta);
-            }
-        }
-    }
-
-    return grafo_transposto;
-}
-
+// Função para calcular o fecho transitivo direto 
 vector<char> Grafo::fecho_transitivo_direto(int id_no)
 {
 
@@ -118,9 +67,10 @@ vector<char> Grafo::fecho_transitivo_direto(int id_no)
     return resultado;
 }
 
-vector<char> Grafo::fecho_transitivo_indireto(int id_no)
+// Função para calcular o fecho transitivo indireto
+// Aqui o grafo já chega transposto pela função transpor_grafo()
+vector<char> Grafo::fecho_transitivo_indireto(int id_no) //Aqui o grafo já chega transposto pela função transpor_grafo()
 {
-
     set<char> visitados;
     vector<char> resultado;
 
@@ -211,28 +161,87 @@ Grafo *Grafo::arvore_caminhamento_profundidade(int id_no)
     return nullptr;
 }
 
-int Grafo::raio()
+//Raio eh a menor excentricidade entre todos os nos do grafo
+int Grafo::raio() 
 {
-    cout << "Metodo nao implementado" << endl;
-    return 0;
+    int raio = INT_MAX/2;
+
+    for (No* no : lista_adj){
+        int excentricidade = this->excentricidade(no->id);
+        raio = min(raio, excentricidade);
+    }
+    
+    if (raio == INT_MAX/2) {
+        cout << "Grafo desconexo, raio indefinido." << endl;
+        return -1;
+    }
+
+    return raio;
 }
 
+
+// Diametro eh a maior excentricidade entre todos os nos do grafo
 int Grafo::diametro()
 {
-    cout << "Metodo nao implementado" << endl;
-    return 0;
+    int diametro = 0;
+
+    for (No* no : lista_adj) {
+        int excentricidade = this->excentricidade(no->id);
+        diametro = max(diametro, excentricidade);
+    }
+
+    if(diametro == 0) {
+        cout << "Grafo desconexo, diâmetro indefinido." << endl;
+        return -1;
+    }
+
+    return diametro;
 }
 
+// Centro do grafo eh o conjunto de nós com excentricidade igual ao raio do grafo
 vector<char> Grafo::centro()
 {
-    cout << "Metodo nao implementado" << endl;
-    return {};
+    int raio = this->raio();
+
+    if (raio == -1) {
+        cout << "Grafo desconexo, centro indefinido." << endl;
+        return {};
+    }
+
+    vector<char> centro;
+
+    for(No* no : lista_adj) {
+        int excentricidade = this->excentricidade(no->id);
+
+        if (excentricidade == raio) 
+            centro.push_back(no->id);
+        
+    }
+
+    return centro;
 }
 
+// Periferia do grafo eh o conjunto de nós com excentricidade igual ao diâmetro do grafo
 vector<char> Grafo::periferia()
 {
-    cout << "Metodo nao implementado" << endl;
-    return {};
+    int diametro = this->diametro();
+
+    if (diametro == -1) {
+        cout << "Grafo desconexo, periferia indefinida." << endl;
+        return {};
+    }
+
+    vector<char> periferia;
+
+    for(No* no : lista_adj) {
+        int excentricidade = this->excentricidade(no->id);
+
+        if (excentricidade == diametro) 
+            periferia.push_back(no->id);
+        
+    }
+
+    return periferia;
 }
 
 vector<char> Grafo::vertices_de_articulacao()
@@ -240,6 +249,7 @@ vector<char> Grafo::vertices_de_articulacao()
     cout << "Metodo nao implementado" << endl;
     return {};
 }
+
 
 void Grafo::_tokenizationDAV(string line)
 {
@@ -352,4 +362,152 @@ void Grafo::naoVisitado()
     {
         no->visitado = false;
     }
+}
+
+// Função auxiliar para calcular a matriz de distâncias usando o algoritmo de Floyd-Warshall
+vector<vector<int>> Grafo::calcular_matriz_distancia() {
+    
+    const int INF = INT_MAX/2;
+
+    int n = this->ordem;
+    map<char, int> id_para_indice; 
+    vector<char> indice_para_id(n); 
+
+    for (int i = 0; i < n; i++) { // Preenche os mapas com os ids e índices dos nós
+        id_para_indice[lista_adj[i]->id] = i; 
+        indice_para_id[i] = lista_adj[i]->id; 
+    }
+
+    vector<vector<int>> matriz_distancias(n, vector<int>(n, INF)); // Inicializa a matriz de distâncias com infinito
+    
+    for (int i = 0; i < n; ++i) // Inicializa a matriz de distâncias com 0 para a diagonal 
+        matriz_distancias[i][i] = 0;
+
+    for (No* no : lista_adj) {
+        int u = id_para_indice[no->id];
+
+        for (Aresta* aresta : no->arestas) {
+            int v = id_para_indice[aresta->id_no_alvo];
+            int peso = this->in_ponderado_aresta ? aresta->peso : 1;
+            matriz_distancias[u][v] = peso;
+            
+            if (!this->in_direcionado) // Se o grafo não for direcionado, coloca a aresta na matriz de forma simétrica
+                matriz_distancias[v][u] = peso;
+        }
+
+    }
+
+    matriz_floyd_warshall(matriz_distancias, n);
+
+    //imprime a matriz de distâncias (teste para visualização, ta dando certo)
+    // cout << "Matriz de distâncias:" << endl;
+    // for (int i = 0; i < n; ++i) {
+    //     for (int j = 0; j < n; ++j) {
+    //         if (matriz_distancias[i][j] == INF)
+    //             cout << "INF ";
+    //         else
+    //             cout << matriz_distancias[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // cout << endl;
+
+
+    return matriz_distancias;
+}
+
+void Grafo::matriz_floyd_warshall(vector<vector<int>> &matriz_distancias, int n) {
+
+    const int INF = INT_MAX/2;
+
+    for (int k = 0; k < n; ++k)
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < n; ++j)
+                if (matriz_distancias[i][k] < INF && matriz_distancias[k][j] < INF)
+                    matriz_distancias[i][j] = min(matriz_distancias[i][j], matriz_distancias[i][k] + matriz_distancias[k][j]);
+
+}
+
+int Grafo::excentricidade(char id_no)
+{
+    vector<vector<int>> matriz_distancias = calcular_matriz_distancia();
+    int indice = -1;
+    int ordem = this->ordem;
+
+    for (int i = 0; i < ordem; i++) { // Procura o índice do nó com o id fornecido
+        if (lista_adj[i]->id == id_no) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) // Se o nó não for encontrado, retorna -1
+        return -1; 
+
+    int excentricidade = 0;
+
+    for (int j = 0; j < this->ordem; j++) {
+        if (matriz_distancias[indice][j] < INT_MAX/2 && matriz_distancias[indice][j] > 0) 
+            excentricidade = max(excentricidade, matriz_distancias[indice][j]);
+            // cout << "distancia de " << id_no << " para " << lista_adj[j]->id << ": " << matriz_distancias[indice][j] << endl;
+            // cout << "excentricidade: " << excentricidade << endl;
+    }
+
+    return excentricidade;
+}
+
+//Função que transpõe o grafo, ou seja, inverte as arestas para que possa auxiliar o cálculo do fecho transitivo indireto.
+//rever para caso de arestas nao direcionadas
+Grafo *Grafo::transpor_grafo()
+{
+
+    Grafo *grafo_transposto = new Grafo();
+    grafo_transposto->ordem = this->ordem;
+    grafo_transposto->in_direcionado = this->in_direcionado;
+    grafo_transposto->in_ponderado_aresta = this->in_ponderado_aresta;
+    grafo_transposto->in_ponderado_vertice = this->in_ponderado_vertice;
+
+    for (No *no : this->lista_adj)
+    {
+        No *novo_no = new No();
+        novo_no->id = no->id;
+        novo_no->peso = no->peso;
+        novo_no->visitado = false;
+        grafo_transposto->lista_adj.push_back(novo_no);
+    }
+
+    for (No *no : this->lista_adj)
+    {
+        for (Aresta *aresta : no->arestas)
+        {
+            No *alvo = grafo_transposto->getNoForId(aresta->id_no_alvo);
+            if (alvo)
+            {
+                Aresta *nova_aresta = new Aresta();
+                nova_aresta->id_no_alvo = no->id;
+                nova_aresta->peso = aresta->peso;
+                alvo->arestas.push_back(nova_aresta);
+            }
+        }
+    }
+
+    return grafo_transposto;
+}
+
+// Função auxiliar para realizar a busca em profundidade e coletar os nós visitados
+void Grafo::fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado)
+{
+    if (visitados.count(id))
+        return;
+
+    visitados.insert(id);
+    resultado.push_back(id);
+    No *no = getNoForId(id);
+
+    if (!no)
+        return;
+
+    for (Aresta *aresta : no->arestas)
+        fecho_busca_em_profundidade(aresta->id_no_alvo, visitados, resultado);
+    
 }

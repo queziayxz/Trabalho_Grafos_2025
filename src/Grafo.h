@@ -33,7 +33,10 @@ public:
     Grafo* arvore_geradora_minima_prim(vector<char> ids_nos); // e
     Grafo* arvore_geradora_minima_kruskal(vector<char> ids_nos); // f
     Grafo* arvore_caminhamento_profundidade(int id_no); // g
-    void fecho_busca_em_profundidade(char id, set<char>& visitados, vector<char>& resultado);
+    vector<vector<int>> calcular_matriz_distancia();
+    void fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado);
+    void matriz_floyd_warshall(vector<vector<int>> &matriz, int n);
+    int excentricidade(char id_no);
     Grafo *transpor_grafo();
     int raio();     // h 1
     int diametro(); // h 2
@@ -49,8 +52,7 @@ public:
     bool in_ponderado_aresta;
     bool in_ponderado_vertice;
     vector<No*> lista_adj;
+    void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
 };
-
-
 
 #endif //GRAFO_H

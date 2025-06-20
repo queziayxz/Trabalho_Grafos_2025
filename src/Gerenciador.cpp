@@ -1,5 +1,6 @@
 #include "Gerenciador.h"
 #include <fstream>
+#include "Grafo.h"
 
 void Gerenciador::comandos(Grafo *grafo)
 {
@@ -22,6 +23,14 @@ void Gerenciador::comandos(Grafo *grafo)
     {
     case 'a':
     {
+        cout << endl;
+
+        if (!grafo->in_direcionado)
+        {
+            cout << "Grafo nao direcionado, fecho transitivo direto nao faz sentido!" << endl
+                 << endl;
+            break;
+        }
 
         char id_no = get_id_entrada();
         vector<char> fecho_transitivo_direto = grafo->fecho_transitivo_direto(id_no);
@@ -46,8 +55,8 @@ void Gerenciador::comandos(Grafo *grafo)
 
         if (pergunta_imprimir_arquivo("fecho_trans_dir.txt"))
         {
-            cout << "Metodo de impressao em arquivo nao implementado" << endl
-                 << endl;
+            grafo->imprimir_fecho_em_arquivo(fecho_transitivo_direto, "fecho_trans_dir.txt");
+            cout << "Fecho transitivo direto impresso!" << endl;
         }
 
         break;
@@ -55,12 +64,20 @@ void Gerenciador::comandos(Grafo *grafo)
 
     case 'b':
     {
+        cout << endl;
+
+        if (!grafo->in_direcionado)
+        {
+            cout << "Grafo nao direcionado, fecho transitivo indireto nao faz sentido!" << endl
+                 << endl;
+            break;
+        }
 
         grafo = grafo->transpor_grafo();
         char id_no = get_id_entrada();
 
         vector<char> fecho_transitivo_indireto = grafo->fecho_transitivo_indireto(id_no);
-
+        
         if (fecho_transitivo_indireto.empty())
         {
             cout << "O no '" << id_no << "' nao possui fecho transitivo indireto!" << endl
@@ -81,9 +98,11 @@ void Gerenciador::comandos(Grafo *grafo)
 
         if (pergunta_imprimir_arquivo("fecho_trans_indir.txt"))
         {
-            cout << "Metodo de impressao em arquivo nao implementado" << endl
-                 << endl;
+            grafo->imprimir_fecho_em_arquivo(fecho_transitivo_indireto, "fecho_trans_indir.txt");
+            cout << "Fecho transitivo indireto impresso!" << endl;
         }
+
+        break;
     }
 
     case 'c':
@@ -204,9 +223,31 @@ void Gerenciador::comandos(Grafo *grafo)
 
     case 'h':
     {
-        vector<char> articulacao = grafo->vertices_de_articulacao();
-        cout << "Metodo de impressao em tela nao implementado" << endl
-             << endl;
+        cout << endl;
+
+        int raio = grafo->raio();
+        cout << "Raio do grafo: " << raio << endl;
+
+        int diametro = grafo->diametro();
+        cout << "Diametro do grafo: " << diametro << endl;
+
+        vector<char> centro = grafo->centro();
+        cout << "Centro do grafo: [ ";
+        for (char id : centro)
+        {
+            cout << id << " ";
+        }
+        cout << "]" << endl;
+
+        vector<char> periferia = grafo->periferia();
+        cout << "Periferia do grafo: [ ";
+        for (char id : periferia)
+        {
+            cout << id << " ";
+        }
+        cout << "]" << endl;
+        cout << endl;
+
 
         if (pergunta_imprimir_arquivo("arvore_caminhamento_profundidade.txt"))
         {
@@ -249,6 +290,7 @@ char Gerenciador::get_id_entrada()
     char id;
     cin >> id;
     cout << endl;
+
     return id;
 }
 
@@ -309,4 +351,26 @@ bool Gerenciador::pergunta_imprimir_arquivo(string nome_arquivo)
         cout << "Resposta invalida" << endl;
         return pergunta_imprimir_arquivo(nome_arquivo);
     }
+}
+
+void Grafo::imprimir_fecho_em_arquivo(const vector<char>& fecho, const string& nome_arquivo) {
+    
+    string caminho = "instancias/" + nome_arquivo;
+    ofstream arquivo(caminho);
+
+    if (!arquivo.is_open()) {
+        cerr << "Erro ao abrir o arquivo: " << nome_arquivo << endl;
+        return;
+    }
+
+    // Cabeçalho do grafo
+    arquivo << this->in_direcionado << " " << this->in_ponderado_aresta << " " << this->in_ponderado_vertice << endl;
+    arquivo << fecho.size() << endl;
+
+    // Imprime os vértices do fecho
+    for (char id : fecho) {
+        arquivo << id << endl;
+    }
+
+    arquivo.close();
 }
