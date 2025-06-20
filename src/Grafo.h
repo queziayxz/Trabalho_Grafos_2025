@@ -38,6 +38,7 @@ public:
     void matriz_floyd_warshall(vector<vector<int>> &matriz, int n);
     int excentricidade(char id_no);
     Grafo *transpor_grafo();
+    void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
     int raio();     // h 1
     int diametro(); // h 2
     vector<char> centro(); // h 3

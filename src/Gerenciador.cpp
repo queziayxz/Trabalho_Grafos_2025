@@ -73,7 +73,6 @@ void Gerenciador::comandos(Grafo *grafo)
             break;
         }
 
-        grafo = grafo->transpor_grafo();
         char id_no = get_id_entrada();
 
         vector<char> fecho_transitivo_indireto = grafo->fecho_transitivo_indireto(id_no);

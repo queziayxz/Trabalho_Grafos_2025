@@ -51,13 +51,8 @@ Grafo::~Grafo()
 
 }
 
-
-// ************* Fecho transitivo direto e indireto *************
-
-// Função para calcular o fecho transitivo direto 
 vector<char> Grafo::fecho_transitivo_direto(int id_no)
 {
-
     set<char> visitados;
     vector<char> resultado;
     
@@ -67,15 +62,17 @@ vector<char> Grafo::fecho_transitivo_direto(int id_no)
     return resultado;
 }
 
-// Função para calcular o fecho transitivo indireto
-// Aqui o grafo já chega transposto pela função transpor_grafo()
-vector<char> Grafo::fecho_transitivo_indireto(int id_no) //Aqui o grafo já chega transposto pela função transpor_grafo()
+vector<char> Grafo::fecho_transitivo_indireto(int id_no) 
 {
+    Grafo *grafo_transposto = this->transpor_grafo();
+
     set<char> visitados;
     vector<char> resultado;
 
-    fecho_busca_em_profundidade(id_no, visitados, resultado);
+    grafo_transposto->fecho_busca_em_profundidade(id_no, visitados, resultado);
     resultado.erase(remove(resultado.begin(), resultado.end(), id_no), resultado.end());
+
+    delete grafo_transposto;
 
     return resultado;
 }
@@ -456,19 +453,15 @@ int Grafo::excentricidade(char id_no)
     return excentricidade;
 }
 
-//Função que transpõe o grafo, ou seja, inverte as arestas para que possa auxiliar o cálculo do fecho transitivo indireto.
-//rever para caso de arestas nao direcionadas
 Grafo *Grafo::transpor_grafo()
 {
-
     Grafo *grafo_transposto = new Grafo();
     grafo_transposto->ordem = this->ordem;
     grafo_transposto->in_direcionado = this->in_direcionado;
     grafo_transposto->in_ponderado_aresta = this->in_ponderado_aresta;
     grafo_transposto->in_ponderado_vertice = this->in_ponderado_vertice;
 
-    for (No *no : this->lista_adj)
-    {
+    for (No *no : this->lista_adj){
         No *novo_no = new No();
         novo_no->id = no->id;
         novo_no->peso = no->peso;
@@ -476,13 +469,10 @@ Grafo *Grafo::transpor_grafo()
         grafo_transposto->lista_adj.push_back(novo_no);
     }
 
-    for (No *no : this->lista_adj)
-    {
-        for (Aresta *aresta : no->arestas)
-        {
+    for (No *no : this->lista_adj){
+        for (Aresta *aresta : no->arestas){
             No *alvo = grafo_transposto->getNoForId(aresta->id_no_alvo);
-            if (alvo)
-            {
+            if (alvo){
                 Aresta *nova_aresta = new Aresta();
                 nova_aresta->id_no_alvo = no->id;
                 nova_aresta->peso = aresta->peso;
