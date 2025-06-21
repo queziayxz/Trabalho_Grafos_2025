@@ -8,6 +8,7 @@
 #include "No.h"
 #include <iostream>
 #include <vector>
+#include <set>
 
 
 using namespace std;
@@ -38,6 +39,15 @@ public:
     vector<char> periferia(); // h 4
     vector<char> vertices_de_articulacao(); // i
 
+    vector<vector<int>> calcular_matriz_distancia();
+    void fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado);
+    void matriz_floyd_warshall(vector<vector<int>> &matriz, int n);
+    int excentricidade(char id_no);
+    Grafo *transpor_grafo();
+    void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
+    void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
+
+
     void naoVisitado();
 
 
@@ -46,8 +56,7 @@ public:
     bool in_ponderado_aresta;
     bool in_ponderado_vertice;
     vector<No*> lista_adj;
+    void salvar_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
 };
-
-
 
 #endif //GRAFO_H
