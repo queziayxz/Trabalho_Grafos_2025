@@ -43,13 +43,18 @@ void Gerenciador::comandos(Grafo *grafo)
         }
         else
         {
-            cout << "Ha " << fecho_transitivo_direto.size() << " no(s) no fecho transitivo direto!" << endl;
-            cout << "O fecho eh dado por: [ ";
+            cout << "Ha " << fecho_transitivo_direto.size() << " no(s) no fecho transitivo direto em questao." << endl;
+            cout << "-> O fecho eh dado por: F(" << id_no << ")" << " = {";
+
             for (char id : fecho_transitivo_direto)
             {
-                cout << id << " ";
+                if(id == fecho_transitivo_direto.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
             }
-            cout << "]" << endl
+
+            cout << "}" << endl
                  << endl;
         }
 
@@ -85,13 +90,18 @@ void Gerenciador::comandos(Grafo *grafo)
         }
         else
         {
-            cout << "Ha "<< fecho_transitivo_indireto.size() << " no(s) no fecho transitivo indireto!" << endl;
-            cout << "O fecho eh dado por: [ ";
+            cout << "Ha "<< fecho_transitivo_indireto.size() << " no(s) no fecho transitivo indireto em questao." << endl;
+            cout << "-> O fecho eh dado por: F(" << id_no << ")" << " = {";
+
             for (char id : fecho_transitivo_indireto)
             {
-                cout << id << " ";
+                if(id == fecho_transitivo_indireto.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
             }
-            cout << "]" << endl
+
+            cout << "}" << endl
                  << endl;
         }
 
@@ -288,6 +298,7 @@ char Gerenciador::get_id_entrada()
     cout << "Digite o id de um no: ";
     char id;
     cin >> id;
+    
     cout << endl;
 
     return id;

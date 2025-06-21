@@ -158,7 +158,6 @@ Grafo *Grafo::arvore_caminhamento_profundidade(int id_no)
     return nullptr;
 }
 
-//Raio eh a menor excentricidade entre todos os nos do grafo
 int Grafo::raio() 
 {
     int raio = INT_MAX/2;
@@ -176,8 +175,6 @@ int Grafo::raio()
     return raio;
 }
 
-
-// Diametro eh a maior excentricidade entre todos os nos do grafo
 int Grafo::diametro()
 {
     int diametro = 0;
@@ -195,7 +192,6 @@ int Grafo::diametro()
     return diametro;
 }
 
-// Centro do grafo eh o conjunto de nós com excentricidade igual ao raio do grafo
 vector<char> Grafo::centro()
 {
     int raio = this->raio();
@@ -218,7 +214,6 @@ vector<char> Grafo::centro()
     return centro;
 }
 
-// Periferia do grafo eh o conjunto de nós com excentricidade igual ao diâmetro do grafo
 vector<char> Grafo::periferia()
 {
     int diametro = this->diametro();
@@ -361,7 +356,6 @@ void Grafo::naoVisitado()
     }
 }
 
-// Função auxiliar para calcular a matriz de distâncias usando o algoritmo de Floyd-Warshall
 vector<vector<int>> Grafo::calcular_matriz_distancia() {
     
     const int INF = INT_MAX/2;
@@ -370,14 +364,15 @@ vector<vector<int>> Grafo::calcular_matriz_distancia() {
     map<char, int> id_para_indice; 
     vector<char> indice_para_id(n); 
 
-    for (int i = 0; i < n; i++) { // Preenche os mapas com os ids e índices dos nós
+    //trata os ids dos nós que são caracteres para inteiros, assim pode usar como índice na matriz
+    for (int i = 0; i < n; i++) { 
         id_para_indice[lista_adj[i]->id] = i; 
         indice_para_id[i] = lista_adj[i]->id; 
     }
 
-    vector<vector<int>> matriz_distancias(n, vector<int>(n, INF)); // Inicializa a matriz de distâncias com infinito
+    vector<vector<int>> matriz_distancias(n, vector<int>(n, INF)); //inicializa a matriz de distâncias com "infinito"
     
-    for (int i = 0; i < n; ++i) // Inicializa a matriz de distâncias com 0 para a diagonal 
+    for (int i = 0; i < n; ++i) //inicializa a matriz de distâncias com 0 para a diagonal 
         matriz_distancias[i][i] = 0;
 
     for (No* no : lista_adj) {
@@ -388,7 +383,7 @@ vector<vector<int>> Grafo::calcular_matriz_distancia() {
             int peso = this->in_ponderado_aresta ? aresta->peso : 1;
             matriz_distancias[u][v] = peso;
             
-            if (!this->in_direcionado) // Se o grafo não for direcionado, coloca a aresta na matriz de forma simétrica
+            if (!this->in_direcionado) //se o grafo não for direcionado, coloca a aresta na matriz de forma simétrica
                 matriz_distancias[v][u] = peso;
         }
 
@@ -431,14 +426,14 @@ int Grafo::excentricidade(char id_no)
     int indice = -1;
     int ordem = this->ordem;
 
-    for (int i = 0; i < ordem; i++) { // Procura o índice do nó com o id fornecido
+    for (int i = 0; i < ordem; i++) { //procura o índice do nó com o id fornecido
         if (lista_adj[i]->id == id_no) {
             indice = i;
             break;
         }
     }
 
-    if (indice == -1) // Se o nó não for encontrado, retorna -1
+    if (indice == -1) //se o nó não for encontrado, retorna -1
         return -1; 
 
     int excentricidade = 0;
@@ -484,7 +479,6 @@ Grafo *Grafo::transpor_grafo()
     return grafo_transposto;
 }
 
-// Função auxiliar para realizar a busca em profundidade e coletar os nós visitados
 void Grafo::fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado)
 {
     if (visitados.count(id))
