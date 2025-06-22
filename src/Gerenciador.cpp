@@ -373,13 +373,46 @@ void Grafo::imprimir_fecho_em_arquivo(const vector<char>& fecho, const string& n
         return;
     }
 
-    // Cabeçalho do grafo
+    //cabeçalho
     arquivo << this->in_direcionado << " " << this->in_ponderado_aresta << " " << this->in_ponderado_vertice << endl;
     arquivo << fecho.size() << endl;
 
-    // Imprime os vértices do fecho
+    // imprime os nós do fecho
+    for (char id : fecho){
+        
+        if(this->in_ponderado_vertice) { // se o grafo for ponderado
+            No* no = getNoForId(id);
+            arquivo << id << " " << no->peso << endl;
+        } else {
+            arquivo << id << endl;
+        }
+
+    }
+
     for (char id : fecho) {
-        arquivo << id << endl;
+
+        No* no = getNoForId(id);
+
+        for (Aresta* aresta : no->arestas) {
+            
+            bool destino_no_fecho = false;
+            
+            for (char outro : fecho) { //verifica se o destino da aresta está no fecho
+                
+                if (aresta->id_no_alvo == outro) {
+                    destino_no_fecho = true;
+                    break;
+                }
+            }
+
+            if (destino_no_fecho) { //se o destino da aresta está no fecho, imprime a aresta
+                
+                if (this->in_ponderado_aresta)
+                    arquivo << id << " " << aresta->id_no_alvo << " " << aresta->peso << endl;
+                else
+                    arquivo << id << " " << aresta->id_no_alvo << endl;
+            }
+        }
     }
 
     arquivo.close();
