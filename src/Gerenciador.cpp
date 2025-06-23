@@ -58,7 +58,7 @@ void Gerenciador::comandos(Grafo* grafo) {
         if (pergunta_imprimir_arquivo("fecho_trans_dir.txt"))
         {
             grafo->imprimir_fecho_em_arquivo(fecho_transitivo_direto, "fecho_trans_dir.txt");
-            cout << "Fecho transitivo direto impresso!" << endl;
+            cout << "Fecho transitivo direto impresso!" << endl << endl;
         }
 
         break;
@@ -105,7 +105,7 @@ void Gerenciador::comandos(Grafo* grafo) {
         if (pergunta_imprimir_arquivo("fecho_trans_indir.txt"))
         {
             grafo->imprimir_fecho_em_arquivo(fecho_transitivo_indireto, "fecho_trans_indir.txt");
-            cout << "Fecho transitivo indireto impresso!" << endl;
+            cout << "Fecho transitivo indireto impresso!" << endl << endl;
         }
 
         break;
@@ -215,26 +215,34 @@ void Gerenciador::comandos(Grafo* grafo) {
             cout << endl;
 
             int raio = grafo->raio();
-            cout << "Raio do grafo: " << raio << endl;
+            cout << "Raio do grafo: R(G) = " << raio << ";" << endl;
 
             int diametro = grafo->diametro();
-            cout << "Diametro do grafo: " << diametro << endl;
+            cout << "Diametro do grafo: D(G) = " << diametro << ";" << endl;
 
             vector<char> centro = grafo->centro();
-            cout << "Centro do grafo: [ ";
+            cout << "Centro do grafo: C(G) = {";
             
-            for (char id : centro)
-                cout << id << " ";
+            for (char id : centro){
+                if(id == centro.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
+            };
     
-            cout << "]" << endl;
+            cout << "};" << endl;
 
             vector<char> periferia = grafo->periferia();
-            cout << "Periferia do grafo: [ ";
+            cout << "Periferia do grafo: P(G) = {";
 
-            for (char id : periferia)
-                cout << id << " ";
+            for (char id : periferia){
+                if(id == periferia.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
+            };
 
-            cout << "]" << endl;
+            cout << "}." << endl;
             cout << endl;
 
 
