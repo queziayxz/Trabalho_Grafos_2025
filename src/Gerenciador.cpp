@@ -215,13 +215,13 @@ void Gerenciador::comandos(Grafo* grafo) {
             cout << endl;
 
             int raio = grafo->raio();
-            cout << "Raio do grafo: R(G) = " << raio << ";" << endl;
+            cout << "Raio do grafo: rad(G) = " << raio << ";" << endl;
 
             int diametro = grafo->diametro();
-            cout << "Diametro do grafo: D(G) = " << diametro << ";" << endl;
+            cout << "Diametro do grafo: diam(G) = " << diametro << ";" << endl;
 
             vector<char> centro = grafo->centro();
-            cout << "Centro do grafo: C(G) = {";
+            cout << "Centro do grafo: Z(G) = {";
             
             for (char id : centro){
                 if(id == centro.back())
@@ -233,7 +233,7 @@ void Gerenciador::comandos(Grafo* grafo) {
             cout << "};" << endl;
 
             vector<char> periferia = grafo->periferia();
-            cout << "Periferia do grafo: P(G) = {";
+            cout << "Periferia do grafo: Per(G) = {";
 
             for (char id : periferia){
                 if(id == periferia.back())
