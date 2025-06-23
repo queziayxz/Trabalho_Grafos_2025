@@ -2,6 +2,7 @@
 #include <sstream>
 #include <cstring>
 #include <regex>
+#include <cmath>
 
 #include "Grafo.h"
 
