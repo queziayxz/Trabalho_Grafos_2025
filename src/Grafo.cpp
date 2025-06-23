@@ -3,6 +3,7 @@
 #include <cstring>
 #include <regex>
 #include <cmath>
+#include <climits>
 
 #include "Grafo.h"
 
