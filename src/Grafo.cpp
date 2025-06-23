@@ -14,7 +14,7 @@ Grafo::Grafo()
 
 Grafo::Grafo(char* fileName) {
     ifstream ifs;
-    ifs.exceptions(std::ios::badbit);
+    ifs.exceptions(std::ios_base::badbit);
 
     char relative[50] = "instancias/";
     std::string line;
@@ -91,38 +91,32 @@ Grafo * Grafo::arvore_geradora_minima_kruskal(vector<char> ids_nos) {
     return nullptr;
 }
 
+/**
+* * Metodo responsavel por retornar a arvore de caminhamento em profundidade a partir de um no
+* TODO: Arrumar pesos quando eh ponderado (aresta ou vertice) */
 Grafo * Grafo::arvore_caminhamento_profundidade(int id_no) {
     Grafo* grafo = new Grafo();
-    grafo->ordem = 0;
+    grafo->ordem = this->ordem;
     grafo->in_direcionado = this->in_direcionado;
     grafo->in_ponderado_aresta = this->in_ponderado_aresta;
     grafo->in_ponderado_vertice = this->in_ponderado_vertice;
 
     Grafo* H = new Grafo();
     H->ordem = 0;
-
-    // cout << "size: inicio " << this->lista_adj.size() << endl;
     
-    // cout << "lista adjacencia:" << endl;
     for(No* no : this->lista_adj) {
-        // cout << no->id << " ";
         if(no->id == id_no) {
             no->visitado = true;
-            // cout << no->id << " | ";
             No* noAux = new No();
             noAux->id = id_no;
             noAux->peso = no->peso;
             noAux->visitado = true;
-            grafo->ordem++;
             grafo->lista_adj.push_back(noAux);
 
-            // cout << "size arestas: " << no->arestas.size() << endl;
             for(Aresta* aresta : no->arestas) {
                 No* vertice = getNoForId(aresta->id_no_alvo);
                 if(vertice == nullptr) return nullptr;
                 if(vertice->visitado) continue;
-
-                // vertice->visitado = true;
 
                 H = arvore_caminhamento_profundidade(vertice->id);
                 
@@ -133,12 +127,8 @@ Grafo * Grafo::arvore_caminhamento_profundidade(int id_no) {
                 are->peso = 0;
                 grafo->lista_adj[0]->arestas.push_back(are);
             }
-
             return grafo;
-
         }
-
-        // cout << endl;
     }
     return nullptr;
 }
@@ -324,6 +314,35 @@ void Grafo::naoVisitado()
 {
     for(No* no : this->lista_adj) {
         no->visitado = false;
+    }
+}
+
+void Grafo::imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo)
+{
+    string path = "instancias/"+nome_arquivo;
+
+    ofstream ofs;
+    ofs.exceptions(ios_base::badbit | ios_base::failbit);
+    
+    try {
+        ofs.open(path,ios_base::trunc | ios_base::binary);
+
+        ofs << this->in_direcionado << " " << this->in_ponderado_aresta << " " << this->in_ponderado_vertice << "\n";
+        ofs << this->ordem << "\n";
+
+        for(No* no : this->lista_adj) {
+            ofs << no->id << "\n";
+        }
+
+        for(No* no : this->lista_adj) {
+            for(Aresta* aresta : no->arestas) {
+                ofs << no->id << " " << aresta->id_no_alvo << "\n";
+            }
+        }
+
+        ofs.close();
+    } catch(ios_base::failure& e) {
+        cout << "error: " << e.what() << endl;
     }
 }
 

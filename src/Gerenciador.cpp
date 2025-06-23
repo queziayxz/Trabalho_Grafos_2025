@@ -197,13 +197,13 @@ void Gerenciador::comandos(Grafo* grafo) {
             Grafo* arvore_caminhamento_profundidade = grafo->arvore_caminhamento_profundidade(id_no);
             // cout<<"Metodo de impressao em tela nao implementado"<<endl<<endl;
 
-            cout << "caminhamento em profuncidade" << endl;
+            cout << "caminhamento em profundidade" << endl;
             for(No* no : arvore_caminhamento_profundidade->lista_adj) {
                 cout << no->id << " ";
             }
 
             if(pergunta_imprimir_arquivo("arvore_caminhamento_profundidade.txt")) {
-                cout<<"Metodo de impressao em arquivo nao implementado"<<endl;
+                arvore_caminhamento_profundidade->imprimir_arvore_caminho_profundidade_em_arquivo("arvore_caminhamento_profundidade.txt");
             }
 
             delete arvore_caminhamento_profundidade;

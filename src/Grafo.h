@@ -19,6 +19,8 @@ class Grafo {
         void _tokenizationVertices(ifstream& ifs);
         void _tokenizationArestas(ifstream& ifs);
 
+
+
         No* getNoForId(int id_no);
 
 public:
@@ -46,7 +48,8 @@ public:
     Grafo *transpor_grafo();
     void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
     void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
-
+    
+    void imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo);
 
     void naoVisitado();
 
