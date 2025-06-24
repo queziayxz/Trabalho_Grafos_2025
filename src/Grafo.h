@@ -19,9 +19,8 @@ class Grafo {
         void _tokenizationVertices(ifstream& ifs);
         void _tokenizationArestas(ifstream& ifs);
 
-
-
         No* getNoForId(int id_no);
+        Aresta* getArestaForIdAlvo(No* no, char id_alvo);
 
 public:
     Grafo(char* fileName);

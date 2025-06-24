@@ -122,9 +122,7 @@ Grafo * Grafo::arvore_caminhamento_profundidade(int id_no) {
                 
                 int index = grafo->lista_adj.size();
                 grafo->lista_adj.insert(grafo->lista_adj.end(), H->lista_adj.begin(), H->lista_adj.end());
-                Aresta* are = new Aresta();
-                are->id_no_alvo = grafo->lista_adj[index]->id;
-                are->peso = 0;
+                Aresta* are = getArestaForIdAlvo(grafo->lista_adj[0],grafo->lista_adj[index]->id);
                 grafo->lista_adj[0]->arestas.push_back(are);
             }
             return grafo;
@@ -310,6 +308,22 @@ No* Grafo::getNoForId(int id_no)
     return nullptr;
 }
 
+Aresta* Grafo::getArestaForIdAlvo(No* no, char id_alvo)
+{
+    Aresta* ares = new Aresta();
+    for(No* noAux : this->lista_adj) {
+        if(noAux->id == no->id) {
+            for(Aresta* aresta : noAux->arestas) {
+                if(aresta->id_no_alvo == id_alvo) {
+                    ares = aresta;
+                    break;
+                }
+            }
+        }
+    }
+    return ares;
+}
+
 void Grafo::naoVisitado()
 {
     for(No* no : this->lista_adj) {
@@ -331,12 +345,22 @@ void Grafo::imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_ar
         ofs << this->ordem << "\n";
 
         for(No* no : this->lista_adj) {
-            ofs << no->id << "\n";
+            ofs << no->id;
+            if(this->in_ponderado_vertice) {
+                ofs << " " << no->peso;
+            }
+
+            ofs << "\n";
         }
 
         for(No* no : this->lista_adj) {
             for(Aresta* aresta : no->arestas) {
-                ofs << no->id << " " << aresta->id_no_alvo << "\n";
+                ofs << no->id << " " << aresta->id_no_alvo;
+                if(this->in_ponderado_aresta) {
+                    ofs << " " << aresta->peso;
+                }
+
+                ofs << "\n";
             }
         }
 

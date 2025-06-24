@@ -202,6 +202,8 @@ void Gerenciador::comandos(Grafo* grafo) {
                 cout << no->id << " ";
             }
 
+            cout << endl;
+
             if(pergunta_imprimir_arquivo("arvore_caminhamento_profundidade.txt")) {
                 arvore_caminhamento_profundidade->imprimir_arvore_caminho_profundidade_em_arquivo("arvore_caminhamento_profundidade.txt");
             }
