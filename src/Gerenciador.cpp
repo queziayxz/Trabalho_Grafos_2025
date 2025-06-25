@@ -28,28 +28,30 @@ void Gerenciador::comandos(Grafo* grafo) {
     case 'a':
     {
         cout << endl;
-        cout << "**** OPCAO SELECIONADA: Fecho transitivo direto de um no. ***" << endl;
+        cout << "**** OPCAO SELECIONADA: Fecho transitivo direto de um no. ****" << endl;
 
         if (!grafo->in_direcionado)
         {
-            cout << "Grafo nao direcionado, fecho transitivo direto nao faz sentido!" << endl
+            cout << "Grafo nao direcionado, fecho transitivo direto nao se aplica!" << endl
                  << endl;
             break;
         }
 
         char id_no = get_id_entrada();
+        valida_entrada_id_no(id_no, grafo);
+
         vector<char> fecho_transitivo_direto = grafo->fecho_transitivo_direto(id_no);
 
         if (fecho_transitivo_direto.empty())
         {
-            cout << "O no '" << id_no << "' nao possui fecho transitivo direto!" << endl
-                 << endl;
+            cout << "  O no '" << id_no << "' nao possui fecho transitivo direto!" 
+            << endl << "  -> Seu grau de saida eh igual a 0." << endl << endl;
             break;
         }
         else
         {
-            cout << "Ha " << fecho_transitivo_direto.size() << " no(s) no fecho transitivo direto em questao." << endl;
-            cout << "-> O fecho eh dado por: F(" << id_no << ")" << " = {";
+            cout << "  Ha " << fecho_transitivo_direto.size() << " no(s) no fecho transitivo direto em questao." << endl;
+            cout << "  -> O fecho eh dado por: F(" << id_no << ")" << " = {";
 
             for (char id : fecho_transitivo_direto)
             {
@@ -66,7 +68,7 @@ void Gerenciador::comandos(Grafo* grafo) {
         if (pergunta_imprimir_arquivo("fecho_trans_dir.txt"))
         {
             grafo->imprimir_fecho_em_arquivo(fecho_transitivo_direto, "fecho_trans_dir.txt");
-            cout << "Fecho transitivo direto impresso!" << endl << endl;
+            cout << endl << "> Fecho transitivo direto impresso com sucesso!" << endl << endl;
         }
 
         break;
@@ -75,29 +77,30 @@ void Gerenciador::comandos(Grafo* grafo) {
     case 'b':
     {
         cout << endl;
-        cout << "**** OPCAO SELECIONADA: Fecho transitivo indireto de um no. ***" << endl;
+        cout << "**** OPCAO SELECIONADA: Fecho transitivo indireto de um no. ****" << endl;
 
         if (!grafo->in_direcionado)
         {
-            cout << "Grafo nao direcionado, fecho transitivo indireto nao faz sentido!" << endl
+            cout << "Grafo nao direcionado, fecho transitivo indireto nao se aplica!" << endl
                  << endl;
             break;
         }
 
         char id_no = get_id_entrada();
+        valida_entrada_id_no(id_no, grafo);
 
         vector<char> fecho_transitivo_indireto = grafo->fecho_transitivo_indireto(id_no);
         
         if (fecho_transitivo_indireto.empty())
         {
-            cout << "O no '" << id_no << "' nao possui fecho transitivo indireto!" << endl
-                 << endl;
+            cout << "  O no '" << id_no << "' nao possui fecho transitivo indireto!" 
+            << endl << "  -> Seu grau de entrada eh igual a 0." << endl << endl;
             break;
         }
         else
         {
-            cout << "Ha "<< fecho_transitivo_indireto.size() << " no(s) no fecho transitivo indireto em questao." << endl;
-            cout << "-> O fecho eh dado por: F(" << id_no << ")" << " = {";
+            cout << "  Ha "<< fecho_transitivo_indireto.size() << " no(s) no fecho transitivo indireto em questao." << endl;
+            cout << "  -> O fecho eh dado por: F(" << id_no << ")" << " = {";
 
             for (char id : fecho_transitivo_indireto)
             {
@@ -114,7 +117,7 @@ void Gerenciador::comandos(Grafo* grafo) {
         if (pergunta_imprimir_arquivo("fecho_trans_indir.txt"))
         {
             grafo->imprimir_fecho_em_arquivo(fecho_transitivo_indireto, "fecho_trans_indir.txt");
-            cout << "Fecho transitivo indireto impresso!" << endl << endl;
+            cout << endl << "> Fecho transitivo direto impresso com sucesso!" << endl << endl;
         }
 
         break;
@@ -123,16 +126,19 @@ void Gerenciador::comandos(Grafo* grafo) {
         case 'c': {
 
             cout << endl;
-            cout << "**** OPCAO SELECIONADA: Caminho minimo (Dijkstra). ***" << endl;
+            cout << "**** OPCAO SELECIONADA: Caminho minimo (Dijkstra). ****" << endl;
 
             char id_no_1 = get_id_entrada();
+            valida_entrada_id_no(id_no_1, grafo);
+
             char id_no_2 = get_id_entrada();
+            valida_entrada_id_no(id_no_2, grafo);
 
             //Chama a função para buscar o caminho mínimo e aloca em um vetor simples
             vector<char> caminho = grafo->caminho_minimo_dijkstra(id_no_1, id_no_2);
 
             if (caminho.empty()) {
-                cout << "Nao existe caminho entre os nos '" << id_no_1 << "' e '" << id_no_2 << "'." << endl << endl;
+                cout << "  Nao existe caminho entre os nos '" << id_no_1 << "' e '" << id_no_2 << "'." << endl << endl;
             } else {
                 // A string é montada para que se possa imprimir na tela o resultado do vetor do caminho encontrado
                 stringstream caminho_str;
@@ -154,14 +160,17 @@ void Gerenciador::comandos(Grafo* grafo) {
                     }
                 }
 
-                cout << "Caminho minimo (Dijkstra) de " << id_no_1 << " ate " << id_no_2 << ": " 
+                cout << "  Caminho minimo (Dijkstra) de '" << id_no_1 << "' ate '" << id_no_2 << "': " 
                     << caminho_str.str() << endl;
-                cout << "Soma dos pesos das arestas no caminho: " << soma_pesos << endl << endl;
+                cout << "  Soma dos pesos das arestas no caminho minimo: " << soma_pesos << endl << endl;
             }
+
+            if (caminho.empty())
+                break;
 
             if (pergunta_imprimir_arquivo("caminho_minimo_dijkstra.txt")) {
                 grafo->imprimir_caminho_minimo(caminho, "caminho_minimo_dijkstra.txt");
-                cout << "Caminho minimo (Dijkstra) impresso!" << endl << endl;
+                cout << endl << "> Caminho minimo (Dijkstra) impresso com sucesso!" << endl << endl;
             }
 
 
@@ -171,16 +180,19 @@ void Gerenciador::comandos(Grafo* grafo) {
         case 'd': {
 
             cout << endl;
-            cout << "**** OPCAO SELECIONADA: Caminho minimo (Floyd). ***" << endl;
+            cout << "**** OPCAO SELECIONADA: Caminho minimo (Floyd). ****" << endl;
 
             //Como é caminho, precisa ser inserido os vértices de origem e o destino
             char id_no_1 = get_id_entrada();
+            valida_entrada_id_no(id_no_1, grafo);
+
             char id_no_2 = get_id_entrada();
+            valida_entrada_id_no(id_no_2, grafo);
 
             vector<char> caminho = grafo->caminho_minimo_floyd(id_no_1, id_no_2);
 
             if (caminho.empty()) {
-                cout << "Nao existe caminho entre os nos '" << id_no_1 << "' e '" << id_no_2 << "' "<< endl << endl;
+                cout << "  Nao existe caminho entre os nos '" << id_no_1 << "' e '" << id_no_2 << "' "<< endl << endl;
             } else {
                 // String que será utilizada como impressão de resposta
                 stringstream caminho_str;
@@ -202,9 +214,9 @@ void Gerenciador::comandos(Grafo* grafo) {
                     }
                 }
 
-                cout << "Caminho minimo (Floyd) do no '" << id_no_1 << "' ate o no '" << id_no_2 << "': " 
+                cout << "  Caminho minimo (Floyd) do no '" << id_no_1 << "' ate o no '" << id_no_2 << "': " 
                     << caminho_str.str() << endl;
-                cout << "Soma dos pesos das arestas no caminho: " << soma_pesos << endl << endl;
+                cout << "  Soma dos pesos das arestas no caminho minimo: " << soma_pesos << endl << endl;
             }
 
             // Imprime a matriz de distância feita com o algorritmo de Floyd
@@ -265,13 +277,13 @@ void Gerenciador::comandos(Grafo* grafo) {
             //     cout << endl;
             // }
 
-            cout << endl;
+            if (caminho.empty())
+                break;
 
             if (pergunta_imprimir_arquivo("caminho_minimo_floyd.txt")) {
                 grafo->imprimir_caminho_minimo(caminho, "caminho_minimo_floyd.txt");
-                cout << "Caminho minimo (Floyd) impresso!" << endl << endl;
+                cout << "> Caminho minimo (Floyd) impresso!" << endl << endl;
             }
-
 
             break;
         }
@@ -467,10 +479,9 @@ void Gerenciador::comandos(Grafo* grafo) {
 }
 
 char Gerenciador::get_id_entrada() {
-    cout<<"Digite o id de um no: ";
+    cout<<"> Digite o id de um no: ";
     char id;
     cin>>id;
-    cout<<endl;
     return id;
 }
 
@@ -704,4 +715,12 @@ void Gerenciador::imprimir_raio_diametro_centro_periferia(int raio, int diametro
     
     arquivo.close();
 
+}
+
+void Gerenciador::valida_entrada_id_no(char &id_no, Grafo *grafo) {
+    while (!grafo->getNoForId(id_no)) {
+        cout << "  O ID informado nao se encontra no grafo. Tente novamente." << endl << endl;
+        id_no = Gerenciador::get_id_entrada();
+    }
+    cout << "  (ID '" << id_no << "' encontrado com sucesso!)." << endl << endl;
 }

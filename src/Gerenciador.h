@@ -17,6 +17,7 @@ public:
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
     void imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquivo);
     static void imprimir_raio_diametro_centro_periferia(int raio, int diametro, const vector<char>& centro, const vector<char>& periferia, const string& nome_arquivo);
+    static void valida_entrada_id_no(char &id_no, Grafo *grafo);
 };
 
 

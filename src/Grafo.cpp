@@ -139,7 +139,7 @@ vector<char> Grafo::caminho_minimo_dijkstra(int id_no_a, int id_no_b) {
     char atual = destino->id;
 
     if (distancia[atual] == INT_MAX) {
-        cout << "Não existe caminho entre " << id_no_a << " e " << id_no_b << endl;
+        //cout << "Não existe caminho entre " << id_no_a << " e " << id_no_b << endl;
         return {};
     }
 
@@ -215,7 +215,7 @@ vector<char> Grafo::caminho_minimo_floyd(int id_no_a, int id_no_b) {
     while (atual != origem) {
         atual = predecessores[origem][atual];
         if (atual == -1) {
-            cout << "Caminho não encontrado corretamente." << endl;
+            //cout << "Caminho não encontrado corretamente." << endl;
             return {};
         }
         caminho.push_back(mapa_indice_para_id[atual]);
