@@ -3,6 +3,9 @@
 #include "Grafo.h"
 #include <sstream>
 #include <map>
+#include <set>
+#include <climits>
+#include <cmath>
 
 
 void Gerenciador::comandos(Grafo* grafo) {
@@ -431,9 +434,10 @@ void Gerenciador::comandos(Grafo* grafo) {
             cout << endl;
 
 
-            if (pergunta_imprimir_arquivo("arvore_caminhamento_profundidade.txt"))
+            if (pergunta_imprimir_arquivo("raio_diametro_centro_periferia.txt"))
             {
-                cout << "Metodo de impressao em arquivo nao implementado" << endl;
+                imprimir_raio_diametro_centro_periferia(raio, diametro, centro, periferia, "raio_diametro_centro_periferia.txt");
+                cout << "> Raio, diametro, centro e periferia impressos!" << endl << endl;
             }
 
             break;
@@ -454,7 +458,7 @@ void Gerenciador::comandos(Grafo* grafo) {
             exit(0);
         }
         default: {
-            cout<<"Opção inválida"<<endl;
+            cout << endl << "Opcao invalida! Digite uma opcao entre 'a' e 'h'." << endl << endl;
         }
     }
 
@@ -501,12 +505,13 @@ vector<char> Gerenciador::get_conjunto_ids(Grafo *grafo, int tam) {
 
 bool Gerenciador::pergunta_imprimir_arquivo(string nome_arquivo) {
 
-    cout<<"Imprimir em arquivo externo? ("<<nome_arquivo<<")"<<endl;
-    cout<<"(1) Sim;"<<endl;
-    cout<<"(2) Nao."<<endl;
+    cout<<"> Imprimir em arquivo externo? ("<<nome_arquivo<<")"<<endl;
+    cout<<"  (1) Sim;"<<endl;
+    cout<<"  (2) Nao."<<endl;
     int resp;
+    cout << "  Sua resposta: ";
     cin>>resp;
-    cout<<endl;
+    //cout<<endl;
 
     switch (resp) {
         case 1:
@@ -514,7 +519,7 @@ bool Gerenciador::pergunta_imprimir_arquivo(string nome_arquivo) {
         case 2:
             return false;
         default:
-            cout<<"Resposta invalida"<<endl;
+            cout<<"  Resposta invalida! "<< endl << endl;
             return pergunta_imprimir_arquivo(nome_arquivo);
     }
 }
@@ -666,4 +671,37 @@ void Grafo::imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquiv
     }
 
     arquivo.close();
+}
+
+void Gerenciador::imprimir_raio_diametro_centro_periferia(int raio, int diametro, const vector<char>& centro, const vector<char>& periferia, const string& nome_arquivo) {
+    
+    string caminho = "instancias/" + nome_arquivo;
+    ofstream arquivo(caminho);
+
+    if (!arquivo.is_open()) {
+        cerr << "Erro ao abrir o arquivo para escrita: " << caminho << endl;
+        return;
+    }
+
+    arquivo << raio << endl;
+    arquivo << diametro << endl;
+
+    for(char id : centro) {
+        if(id == centro.back())
+            arquivo << id;
+        else
+            arquivo << id << ", ";
+    }
+
+    arquivo << endl;
+
+    for(char id : periferia) {
+        if(id == periferia.back())
+            arquivo << id;
+        else
+            arquivo << id << ", ";
+    }
+    
+    arquivo.close();
+
 }

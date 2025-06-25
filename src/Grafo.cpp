@@ -446,6 +446,7 @@ int Grafo::raio()
 
     for (No* no : lista_adj){
         int excentricidade = this->excentricidade(no->id);
+        
         raio = min(raio, excentricidade);
     }
     
@@ -581,6 +582,7 @@ void Grafo::_tokenizationVertices(ifstream &ifs)
  * * Matodo responsavel por realizar o token do arquivo e separar as arestas de cada no
  * TODO: Realizar verificacoes para grafos direcionados
  */
+
 void Grafo::_tokenizationArestas(ifstream &ifs)
 {
     string line;
@@ -662,8 +664,7 @@ vector<vector<int>> Grafo::calcular_matriz_distancia() {
 
         for (Aresta* aresta : no->arestas) {
             int v = id_para_indice[aresta->id_no_alvo];
-            //int peso = this->in_ponderado_aresta ? aresta->peso : 1;
-            int peso = 1;
+            int peso = this->in_ponderado_aresta ? aresta->peso : 1;
             matriz_distancias[u][v] = peso;
             
             if (!this->in_direcionado) //se o grafo não for direcionado, coloca a aresta na matriz de forma simétrica

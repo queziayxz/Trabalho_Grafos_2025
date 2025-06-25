@@ -16,6 +16,7 @@ public:
     void imprimir_fecho_em_arquivo(const vector<char> &fecho, const vector<No *> &lista_adj);
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
     void imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquivo);
+    static void imprimir_raio_diametro_centro_periferia(int raio, int diametro, const vector<char>& centro, const vector<char>& periferia, const string& nome_arquivo);
 };
 
 
