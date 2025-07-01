@@ -572,7 +572,7 @@ void Grafo::imprimir_base(const vector<char>& vetor, ofstream& arquivo) {
 //verificar se precisa incluir ou nao o proprio id no fecho (aqui nao inclui)
 void Grafo::imprimir_fecho_em_arquivo(const vector<char>& fecho, const string& nome_arquivo) {
     
-    string caminho = "instancias/" + nome_arquivo;
+    string caminho = "saidas/" + nome_arquivo;
     ofstream arquivo(caminho);
     
     this->imprimir_base(fecho, arquivo);
@@ -609,7 +609,7 @@ void Grafo::imprimir_fecho_em_arquivo(const vector<char>& fecho, const string& n
 //
 void Grafo::imprimir_caminho_minimo(const vector<char>& caminhoMin, const string& nome_arquivo) {
     
-    string caminho = "instancias/" + nome_arquivo;
+    string caminho = "saidas/" + nome_arquivo;
     ofstream arquivo(caminho);
     
     this->imprimir_base(caminhoMin, arquivo);
@@ -645,7 +645,7 @@ void Grafo::imprimir_caminho_minimo(const vector<char>& caminhoMin, const string
 
 //Teste imprimir agm com base imprimir grafo
 void Grafo::imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquivo) {
-    string caminho = "instancias/" + nome_arquivo;
+    string caminho = "saidas/" + nome_arquivo;
     ofstream arquivo(caminho);
 
     if (!arquivo.is_open()) {
@@ -687,7 +687,7 @@ void Grafo::imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquiv
 
 void Gerenciador::imprimir_raio_diametro_centro_periferia(int raio, int diametro, const vector<char>& centro, const vector<char>& periferia, const string& nome_arquivo) {
     
-    string caminho = "instancias/" + nome_arquivo;
+    string caminho = "saidas/" + nome_arquivo;
     ofstream arquivo(caminho);
 
     if (!arquivo.is_open()) {
