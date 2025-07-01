@@ -630,8 +630,8 @@ void Grafo::_tokenizationVertices(ifstream &ifs)
         vertice->visitado = false;
         this->lista_adj.push_back(vertice);
     }
-    cout << "vertice 3 - id: " << this->lista_adj.at(2)->id << endl;
-    cout << "vertice 3 - peso: " << this->lista_adj.at(2)->peso << endl;
+    //cout << "vertice 3 - id: " << this->lista_adj.at(2)->id << endl;
+    //cout << "vertice 3 - peso: " << this->lista_adj.at(2)->peso << endl;
 }
 
 /*
@@ -669,12 +669,12 @@ void Grafo::_tokenizationArestas(ifstream &ifs)
         }
     }
 
-    cout << "vertices vizinhos de " << this->lista_adj[0]->id << ": ";
-    for (Aresta *ares : this->lista_adj[0]->arestas)
-    {
-        cout << ares->id_no_alvo << ", ";
-    }
-    cout << endl;
+    // cout << "vertices vizinhos de " << this->lista_adj[0]->id << ": ";
+    // for (Aresta *ares : this->lista_adj[0]->arestas)
+    // {
+    //     cout << ares->id_no_alvo << ", ";
+    // }
+    // cout << endl;
 }
 
 No *Grafo::getNoForId(int id_no)
@@ -760,6 +760,7 @@ void Grafo::matriz_floyd_warshall(vector<vector<int>> &matriz_distancias, int n)
             for (int j = 0; j < n; ++j)
                 if (matriz_distancias[i][k] < INF && matriz_distancias[k][j] < INF)
                     matriz_distancias[i][j] = min(matriz_distancias[i][j], matriz_distancias[i][k] + matriz_distancias[k][j]);
+                    
 }
 
 int Grafo::excentricidade(char id_no)

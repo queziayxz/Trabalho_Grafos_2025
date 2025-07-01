@@ -23,6 +23,7 @@ void Gerenciador::comandos(Grafo* grafo) {
     cout << "************************************************** " << endl;
 
     char resp;
+    cout << "> Opcao desejada: ";
     cin >> resp;
     switch (resp) {
     case 'a':
@@ -465,6 +466,7 @@ void Gerenciador::comandos(Grafo* grafo) {
         }
 
         case '0': {
+            cout << endl << "  Saindo do programa..." << endl << endl;
             exit(0);
         }
         default: {
