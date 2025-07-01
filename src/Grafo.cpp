@@ -158,17 +158,17 @@ vector<char> Grafo::caminho_minimo_floyd(int id_no_a, int id_no_b)
 {
     if(!this->in_ponderado_aresta) throw invalid_argument("informe um grafo ponderado");
 
-    vector<vector<int>> caminho_minimo = (this->ordem, vector<int>(this->ordem));
-    vector<vector<char>> predecessores = (this->ordem, vector<char>(this->ordem));
+    vector<vector<int>> caminho_minimo (this->ordem, vector<int>(this->ordem));
+    vector<vector<char>> predecessores (this->ordem, vector<char>(this->ordem));
     vector<char> caminho;
 
     for(int i = 0; i < this->lista_adj.size(); i++) {
         for(int j = 0; j < this->lista_adj.size(); j++) {
-            if(this->lista_adj[i]->id == this->lista_adj[j]) {
+            if(this->lista_adj[i]->id == this->lista_adj[j]->id) {
                 caminho_minimo[i][j] = 0;
             } else {
                 int peso = getPesoAresta(this->lista_adj[i], this->lista_adj[j]->id);
-                if(peso != nullptr) {
+                if(peso != 0) {
                     caminho_minimo[i][j] = peso;
                 }
             }
@@ -582,7 +582,7 @@ int Grafo::getPesoAresta(No* no, char id_alvo)
         }
     }
 
-    return nullptr;
+    return 0;
 }
 
 Aresta* Grafo::getArestaForIdAlvo(No* no, char id_alvo)
