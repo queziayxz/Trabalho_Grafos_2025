@@ -154,75 +154,36 @@ vector<char> Grafo::caminho_minimo_dijkstra(int id_no_a, int id_no_b) {
 }
 
 
-vector<char> Grafo::caminho_minimo_floyd(int id_no_a, int id_no_b) {
-    int tamanho = this->lista_adj.size();
+vector<char> Grafo::caminho_minimo_floyd(int id_no_a, int id_no_b) 
+{
+    if(!this->in_ponderado_aresta) throw invalid_argument("informe um grafo ponderado");
 
-    // Mapeia char -> índice e índice -> char
-    map<char, int> mapa_id_para_indice;
-    map<int, char> mapa_indice_para_id;
-    int indice = 0;
-    for (No* no : this->lista_adj) {
-        mapa_id_para_indice[no->id] = indice;
-        mapa_indice_para_id[indice] = no->id;
-        indice++;
-    }
+    vector<vector<int>> caminho_minimo = (this->ordem, vector<int>(this->ordem));
+    vector<vector<char>> predecessores = (this->ordem, vector<char>(this->ordem));
+    vector<char> caminho;
 
-    // Matriz de distâncias
-    vector<vector<int>> distancia(tamanho, vector<int>(tamanho, INT_MAX));
-
-    // Matriz de predecessores
-    vector<vector<int>> predecessores(tamanho, vector<int>(tamanho, -1));
-
-    // Pesos das arestas para inicializar a matriz
-    for (No* no : this->lista_adj) {
-        int u = mapa_id_para_indice[no->id];
-        distancia[u][u] = 0; // distância para ele mesmo é zero
-
-        for (Aresta* aresta : no->arestas) {
-            int v = mapa_id_para_indice[aresta->id_no_alvo];
-            int peso = this->in_ponderado_aresta ? aresta->peso : 1;
-            distancia[u][v] = peso;
-            predecessores[u][v] = u;
-        }
-    }
-
-    // Algoritmo de Floyd igual do slide
-    for (int k = 0; k < tamanho; k++) {
-        for (int i = 0; i < tamanho; i++) {
-            for (int j = 0; j < tamanho; j++) {
-                if (distancia[i][k] + distancia[k][j] < distancia[i][j]) {
-                    distancia[i][j] = distancia[i][k] + distancia[k][j];
-                    predecessores[i][j] = predecessores[k][j];
+    for(int i = 0; i < this->lista_adj.size(); i++) {
+        for(int j = 0; j < this->lista_adj.size(); j++) {
+            if(this->lista_adj[i]->id == this->lista_adj[j]) {
+                caminho_minimo[i][j] = 0;
+            } else {
+                int peso = getPesoAresta(this->lista_adj[i], this->lista_adj[j]->id);
+                if(peso != nullptr) {
+                    caminho_minimo[i][j] = peso;
                 }
             }
         }
     }
 
-    // Verifica caminho
-    int origem = mapa_id_para_indice[(char)id_no_a];
-    int destino = mapa_id_para_indice[(char)id_no_b];
-
-    if (distancia[origem][destino] == INT_MAX) {
-        cout << "Não existe caminho entre " << (char)id_no_a << " e " << (char)id_no_b << endl;
-        return {};
-    }
-
-    // Reconstrói o caminho
-    vector<char> caminho;
-    int atual = destino;
-    caminho.push_back(mapa_indice_para_id[atual]);
-
-    while (atual != origem) {
-        atual = predecessores[origem][atual];
-        if (atual == -1) {
-            cout << "Caminho não encontrado corretamente." << endl;
-            return {};
+    for(int i = 0; i < this->lista_adj.size(); i++) {
+        for(int j = 0; j < this->lista_adj.size(); j++) {
+            cout << caminho_minimo[i][j] << " ";
         }
-        caminho.push_back(mapa_indice_para_id[atual]);
+        cout << endl;
     }
 
-    reverse(caminho.begin(), caminho.end());
     return caminho;
+
 }
 
 Grafo* Grafo::arvore_geradora_minima_prim(vector<char> ids_nos) {
@@ -625,6 +586,17 @@ No *Grafo::getNoForId(int id_no)
     {
         if (no->id == id_no)
             return no;
+    }
+
+    return nullptr;
+}
+
+int Grafo::getPesoAresta(No* no, char id_alvo)
+{
+    for(Aresta* aresta : no->arestas) {
+        if(aresta->id_no_alvo = id_alvo) {
+            return aresta->peso;
+        }
     }
 
     return nullptr;

@@ -46,6 +46,7 @@ public:
 
     //No* getNoForId(char id);
     No* getNoForId(int id_no);
+    int getPesoAresta(No* no, char id_alvo);
 
     void fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado);
     void matriz_floyd_warshall(vector<vector<int>> &matriz, int n);
