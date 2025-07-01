@@ -12,7 +12,7 @@ Grafo::Grafo()
 Grafo::Grafo(char *fileName)
 {
     ifstream ifs;
-    ifs.exceptions(std::ios::badbit);
+    ifs.exceptions(std::ios_base::badbit);
 
     char relative[50] = "instancias/";
     std::string line;
@@ -344,59 +344,42 @@ Grafo* Grafo::arvore_geradora_minima_kruskal(vector<char> ids_nos) {
     return agm;
 }
 
-Grafo *Grafo::arvore_caminhamento_profundidade(int id_no)
-{
-    Grafo *grafo = new Grafo();
-    grafo->ordem = 0;
+/**
+* * Metodo responsavel por retornar a arvore de caminhamento em profundidade a partir de um no
+* TODO: Arrumar pesos quando eh ponderado (aresta ou vertice) */
+Grafo * Grafo::arvore_caminhamento_profundidade(int id_no) {
+    Grafo* grafo = new Grafo();
+    grafo->ordem = this->ordem;
     grafo->in_direcionado = this->in_direcionado;
     grafo->in_ponderado_aresta = this->in_ponderado_aresta;
     grafo->in_ponderado_vertice = this->in_ponderado_vertice;
 
-    Grafo *H = new Grafo();
+    Grafo* H = new Grafo();
     H->ordem = 0;
-
-    // cout << "size: inicio " << this->lista_adj.size() << endl;
-
-    // cout << "lista adjacencia:" << endl;
-    for (No *no : this->lista_adj)
-    {
-        // cout << no->id << " ";
-        if (no->id == id_no)
-        {
+    
+    for(No* no : this->lista_adj) {
+        if(no->id == id_no) {
             no->visitado = true;
-            // cout << no->id << " | ";
-            No *noAux = new No();
+            No* noAux = new No();
             noAux->id = id_no;
             noAux->peso = no->peso;
             noAux->visitado = true;
-            grafo->ordem++;
             grafo->lista_adj.push_back(noAux);
 
-            // cout << "size arestas: " << no->arestas.size() << endl;
-            for (Aresta *aresta : no->arestas)
-            {
-                No *vertice = getNoForId(aresta->id_no_alvo);
-                if (vertice == nullptr)
-                    return nullptr;
-                if (vertice->visitado)
-                    continue;
-
-                // vertice->visitado = true;
+            for(Aresta* aresta : no->arestas) {
+                No* vertice = getNoForId(aresta->id_no_alvo);
+                if(vertice == nullptr) return nullptr;
+                if(vertice->visitado) continue;
 
                 H = arvore_caminhamento_profundidade(vertice->id);
-
+                
                 int index = grafo->lista_adj.size();
                 grafo->lista_adj.insert(grafo->lista_adj.end(), H->lista_adj.begin(), H->lista_adj.end());
-                Aresta *are = new Aresta();
-                are->id_no_alvo = grafo->lista_adj[index]->id;
-                are->peso = 0;
+                Aresta* are = getArestaForIdAlvo(grafo->lista_adj[0],grafo->lista_adj[index]->id);
                 grafo->lista_adj[0]->arestas.push_back(are);
             }
-
             return grafo;
         }
-
-        // cout << endl;
     }
     return nullptr;
 }
@@ -602,11 +585,66 @@ int Grafo::getPesoAresta(No* no, char id_alvo)
     return nullptr;
 }
 
+Aresta* Grafo::getArestaForIdAlvo(No* no, char id_alvo)
+{
+    Aresta* ares = new Aresta();
+    for(No* noAux : this->lista_adj) {
+        if(noAux->id == no->id) {
+            for(Aresta* aresta : noAux->arestas) {
+                if(aresta->id_no_alvo == id_alvo) {
+                    ares = aresta;
+                    break;
+                }
+            }
+        }
+    }
+    return ares;
+}
+
 void Grafo::naoVisitado()
 {
     for (No *no : this->lista_adj)
     {
         no->visitado = false;
+    }
+}
+
+void Grafo::imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo)
+{
+    string path = "instancias/"+nome_arquivo;
+
+    ofstream ofs;
+    ofs.exceptions(ios_base::badbit | ios_base::failbit);
+    
+    try {
+        ofs.open(path,ios_base::trunc | ios_base::binary);
+
+        ofs << this->in_direcionado << " " << this->in_ponderado_aresta << " " << this->in_ponderado_vertice << "\n";
+        ofs << this->ordem << "\n";
+
+        for(No* no : this->lista_adj) {
+            ofs << no->id;
+            if(this->in_ponderado_vertice) {
+                ofs << " " << no->peso;
+            }
+
+            ofs << "\n";
+        }
+
+        for(No* no : this->lista_adj) {
+            for(Aresta* aresta : no->arestas) {
+                ofs << no->id << " " << aresta->id_no_alvo;
+                if(this->in_ponderado_aresta) {
+                    ofs << " " << aresta->peso;
+                }
+
+                ofs << "\n";
+            }
+        }
+
+        ofs.close();
+    } catch(ios_base::failure& e) {
+        cout << "error: " << e.what() << endl;
     }
 }
 

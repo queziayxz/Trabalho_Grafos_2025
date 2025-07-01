@@ -20,6 +20,7 @@ class Grafo {
         void _tokenizationArestas(ifstream& ifs);
 
         //No* getNoForId(int id_no);
+        Aresta* getArestaForIdAlvo(No* no, char id_alvo);
 
 public:
     Grafo(char* fileName);
@@ -54,6 +55,7 @@ public:
     void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
     void imprimir_base(const vector<char> &fecho, ofstream& arquivo);
     void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
+    void imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo);
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
     void imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquivo);
     void naoVisitado();
