@@ -32,8 +32,7 @@ void Gerenciador::comandos(Grafo* grafo) {
 
         if (!grafo->in_direcionado)
         {
-            cout << "Grafo nao direcionado, fecho transitivo direto nao se aplica!" << endl
-                 << endl;
+            cout << endl << "Grafo nao direcionado, fecho transitivo direto nao se aplica!" << endl << endl;
             break;
         }
 
@@ -81,8 +80,7 @@ void Gerenciador::comandos(Grafo* grafo) {
 
         if (!grafo->in_direcionado)
         {
-            cout << "Grafo nao direcionado, fecho transitivo indireto nao se aplica!" << endl
-                 << endl;
+            cout << endl << "Grafo nao direcionado, fecho transitivo indireto nao se aplica!" << endl << endl;
             break;
         }
 
@@ -449,7 +447,7 @@ void Gerenciador::comandos(Grafo* grafo) {
             if (pergunta_imprimir_arquivo("raio_diametro_centro_periferia.txt"))
             {
                 imprimir_raio_diametro_centro_periferia(raio, diametro, centro, periferia, "raio_diametro_centro_periferia.txt");
-                cout << "> Raio, diametro, centro e periferia impressos!" << endl << endl;
+                cout << endl << "> Raio, diametro, centro e periferia impressos!" << endl << endl;
             }
 
             break;
@@ -515,25 +513,26 @@ vector<char> Gerenciador::get_conjunto_ids(Grafo *grafo, int tam) {
 
 
 bool Gerenciador::pergunta_imprimir_arquivo(string nome_arquivo) {
-
-    cout<<"> Imprimir em arquivo externo? ("<<nome_arquivo<<")"<<endl;
-    cout<<"  (1) Sim;"<<endl;
-    cout<<"  (2) Nao."<<endl;
+    //corrigindo erro de letra
+    cout << "> Imprimir em arquivo externo? (" << nome_arquivo << ")" << endl;
+    cout << "  (1) Sim;" << endl;
+    cout << "  (2) Nao." << endl;
     int resp;
-    cout << "  Sua resposta: ";
-    cin>>resp;
-    //cout<<endl;
 
-    switch (resp) {
-        case 1:
-            return true;
-        case 2:
-            return false;
-        default:
-            cout<<"  Resposta invalida! "<< endl << endl;
-            return pergunta_imprimir_arquivo(nome_arquivo);
+    while (true) {
+        cout << "  Sua resposta: ";
+        if (cin >> resp) {
+            if (resp == 1) return true;
+            if (resp == 2) return false;
+            cout << "  Resposta invalida! Digite 1 ou 2." << endl << endl;
+        } else {
+            cin.clear(); // limpa o failbit
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // descarta o que foi digitado
+            cout << "  Entrada invalida! Digite um número." << endl << endl;
+        }
     }
 }
+
 
 //Função para criar o arquivo, inicialização padrão
 void Grafo::imprimir_base(const vector<char>& vetor, ofstream& arquivo) {
