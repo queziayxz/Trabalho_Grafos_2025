@@ -188,9 +188,9 @@ void Gerenciador::comandos(Grafo* grafo) {
             char id_no_2 = get_id_entrada();
             valida_entrada_id_no(id_no_2, grafo);
 
-            vector<char> caminho = grafo->caminho_minimo_floyd(id_no_1, id_no_2);
+            vector<char> caminho_minimo_floyd = grafo->caminho_minimo_floyd(id_no_1, id_no_2);
 
-            if (caminho.empty()) {
+            if (caminho_minimo_floyd.empty()) {
                 cout << "  Nao existe um caminho possivel entre os nos '" << id_no_1 << "' e '" << id_no_2 << "' "<< endl << endl;
             } else {
                 
@@ -218,7 +218,7 @@ void Gerenciador::comandos(Grafo* grafo) {
             }
             cout << endl;
             if (pergunta_imprimir_arquivo("caminho_minimo_floyd.txt")) {
-                grafo->imprimir_caminho_minimo(caminho, "caminho_minimo_floyd.txt");
+                grafo->imprimir_caminho_minimo(caminho_minimo_floyd, "caminho_minimo_floyd.txt");
                 cout << "> Caminho minimo (Floyd) impresso!" << endl << endl;
             }
 
