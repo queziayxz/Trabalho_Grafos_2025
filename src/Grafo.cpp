@@ -154,7 +154,7 @@ vector<char> Grafo::caminho_minimo_dijkstra(int id_no_a, int id_no_b) {
 }
 
 
-vector<char> Grafo::caminho_minimo_floyd(int id_no_a, int id_no_b) 
+vector<char> Grafo::caminho_minimo_floyd(char id_no, char id_no_b) 
 {
     if(!this->in_ponderado_aresta) throw invalid_argument("informe um grafo ponderado");
 
@@ -162,25 +162,33 @@ vector<char> Grafo::caminho_minimo_floyd(int id_no_a, int id_no_b)
     vector<vector<char>> predecessores (this->ordem, vector<char>(this->ordem));
     vector<char> caminho;
 
-    for(int i = 0; i < this->lista_adj.size(); i++) {
-        for(int j = 0; j < this->lista_adj.size(); j++) {
-            if(this->lista_adj[i]->id == this->lista_adj[j]->id) {
-                caminho_minimo[i][j] = 0;
-            } else {
-                int peso = getPesoAresta(this->lista_adj[i], this->lista_adj[j]->id);
-                if(peso != 0) {
-                    caminho_minimo[i][j] = peso;
+    for(int k = 0; k < this->lista_adj.size(); k++) {
+
+        for(int i = 0; i < this->lista_adj.size(); i++) {
+            for(int j = 0; j < this->lista_adj.size(); j++) {
+                if(this->lista_adj[i]->id == this->lista_adj[j]->id) {
+                    caminho_minimo[i][j] = 0;
+                    predecessores[i][j] = '-';
+                } else {
+                    int peso = getPesoAresta(this->lista_adj[i], this->lista_adj[j]->id);
+                    if(peso != 0) {
+                        caminho_minimo[i][j] = peso;
+                        predecessores[i][j] = this->lista_adj[i]->id;
+                    } else {
+                        caminho_minimo[i][j] = 800000000;
+                        predecessores[i][j] = '-';
+    
+                    }
                 }
             }
         }
     }
 
-    for(int i = 0; i < this->lista_adj.size(); i++) {
-        for(int j = 0; j < this->lista_adj.size(); j++) {
-            cout << caminho_minimo[i][j] << " ";
-        }
-        cout << endl;
-    }
+    matriz_floyd(caminho_minimo,predecessores);
+
+    caminho = getCaminho(predecessores,id_no,id_no_b);
+    reverse(caminho.begin(),caminho.end());
+    if(caminho.size() > 0) caminho.push_back(id_no_b);
 
     return caminho;
 
@@ -577,7 +585,9 @@ No *Grafo::getNoForId(int id_no)
 int Grafo::getPesoAresta(No* no, char id_alvo)
 {
     for(Aresta* aresta : no->arestas) {
-        if(aresta->id_no_alvo = id_alvo) {
+        if(aresta->id_no_alvo == id_alvo) {
+            // cout << "no: " << no->id << endl;
+            // cout << "id alvo: " << aresta->id_no_alvo << endl;
             return aresta->peso;
         }
     }
@@ -711,6 +721,52 @@ void Grafo::matriz_floyd_warshall(vector<vector<int>> &matriz_distancias, int n)
                 if (matriz_distancias[i][k] < INF && matriz_distancias[k][j] < INF)
                     matriz_distancias[i][j] = min(matriz_distancias[i][j], matriz_distancias[i][k] + matriz_distancias[k][j]);
 
+}
+
+void Grafo::matriz_floyd(vector<vector<int>> &matriz_distancias, vector<vector<char>> &predecessores) 
+{
+    for (int k = 0; k < this->lista_adj.size(); ++k) {
+        for (int i = 0; i < this->lista_adj.size(); ++i) {
+            for (int j = 0; j < this->lista_adj.size(); ++j) {
+                if(matriz_distancias[i][j] > matriz_distancias[i][k] + matriz_distancias[k][j]) {
+                    matriz_distancias[i][j] = matriz_distancias[i][k] + matriz_distancias[k][j];
+                    if(predecessores[i][k] == this->lista_adj[i]->id) {
+                        predecessores[i][j] = this->lista_adj[k]->id;
+                    } else {
+                        predecessores[i][j] = predecessores[i][k];
+                    }
+                }
+            }
+        }
+    }
+}
+
+vector<char> Grafo::getCaminho(vector<vector<char>> predecessores, char id_no_a, char id_no_b)
+{
+    vector<char> caminho;
+    // char line = predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id]
+
+    // cout << "[]" << id_no_a - this->lista_adj[0]->id << endl;
+    // cout << "[]" << id_no_b - this->lista_adj[0]->id << endl;
+    // cout << "teste: " << predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id] << endl;
+
+    if(predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id] == id_no_a) {
+        caminho.push_back(predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id]);
+        return caminho;
+    } 
+    if(predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id] == '-') {
+        return caminho;
+    } 
+    else {
+        // cout << "entrou: " << predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id] << endl;
+        // cout << "id a: " << id_no_a << endl;
+        // cout << "id b: " << id_no_b << endl;
+        caminho = getCaminho(predecessores,predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id],id_no_b);
+        caminho.push_back(id_no_a);
+
+    }
+    
+    return caminho;
 }
 
 int Grafo::excentricidade(char id_no)

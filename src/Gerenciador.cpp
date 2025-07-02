@@ -131,7 +131,34 @@ void Gerenciador::comandos(Grafo* grafo) {
             char id_no_1 = get_id_entrada();
             char id_no_2 = get_id_entrada();
             vector<char> caminho_minimo_floyd = grafo->caminho_minimo_floyd(id_no_1,id_no_2);
-            cout<<"Metodo de impressao em tela nao implementado"<<endl<<endl;
+            
+            if(caminho_minimo_floyd.size() == 0) {
+                cout << "Nao existe um caminho possivel de " << id_no_1 << " para " << id_no_2 << endl;
+            } else {
+                int soma_pesos = 0;
+
+                cout << "Caminho minimo (Floyd) do no " << id_no_1 << " ate " << id_no_2 << endl;
+
+                // Será calculada a soma dos pesos
+                for (size_t i = 1; i < caminho_minimo_floyd.size(); i++) {
+                    No* no = grafo->getNoForId(caminho_minimo_floyd[i-1]);
+                    for (Aresta* aresta : no->arestas) {
+                        if (aresta->id_no_alvo == caminho_minimo_floyd[i]) {
+                            soma_pesos += aresta->peso;
+                            break;
+                        }
+                    }
+                }
+
+                cout << "Custo Total: " << soma_pesos << endl;
+                cout << "Caminho: ";
+                for(int i = 0; i < caminho_minimo_floyd.size(); i++) {
+                    cout << caminho_minimo_floyd[i];
+                    if(i < caminho_minimo_floyd.size()-1) cout << " -> ";
+                }
+            }
+
+            cout << endl << endl;
 
             if(pergunta_imprimir_arquivo("caminho_minimo_floyd.txt")) {
                 cout<<"Metodo de impressao em arquivo nao implementado"<<endl;
