@@ -84,7 +84,7 @@ vector<char> Grafo::caminho_minimo_dijkstra(int id_no_a, int id_no_b)
 
     if (!origem || !destino)
     {
-        cout << "No de origem ou destino nao encontrado." << endl;
+        cout << "  No de origem ou destino nao encontrado." << endl;
         return {};
     }
 
@@ -210,7 +210,7 @@ Grafo *Grafo::arvore_geradora_minima_prim(vector<char> ids_nos)
 
     if (!ehConexo(ids_nos))
     {
-        cout << "Subgrafo nao eh conexo" << endl;
+        cout << "  - Subgrafo nao eh conexo." << endl;
         return nullptr;
     }
 
@@ -258,7 +258,7 @@ Grafo *Grafo::arvore_geradora_minima_prim(vector<char> ids_nos)
 
         if (menor_peso == INT_MAX)
         {
-            cout << "Nao ha arestas disponiveis." << endl;
+            cout << "  - Nao ha arestas disponiveis." << endl;
             delete agm;
             return nullptr;
         }
@@ -294,13 +294,13 @@ Grafo *Grafo::arvore_geradora_minima_kruskal(vector<char> ids_nos)
 {
     if (this->in_direcionado)
     {
-        cout << "Só funciona para grafos não direcionados" << endl;
+        cout << "  - Apenas funciona para grafos nao direcionados." << endl;
         return nullptr;
     }
 
     if (!ehConexo(ids_nos))
     {
-        cout << "Subgrafo não é conexo" << endl;
+        cout << "  - Subgrafo não eh conexo." << endl;
         return nullptr;
     }
 
@@ -445,7 +445,7 @@ int Grafo::raio()
 
     if (raio == INT_MAX / 2)
     {
-        cout << "Grafo desconexo, raio indefinido." << endl;
+        cout << "  - Grafo desconexo, raio indefinido." << endl;
         return -1;
     }
 
@@ -464,7 +464,7 @@ int Grafo::diametro()
 
     if (diametro == 0)
     {
-        cout << "Grafo desconexo, diâmetro indefinido." << endl;
+        cout << "  - Grafo desconexo, diâmetro indefinido." << endl;
         return -1;
     }
 
@@ -477,7 +477,7 @@ vector<char> Grafo::centro()
 
     if (raio == -1)
     {
-        cout << "Grafo desconexo, centro indefinido." << endl;
+        cout << "  - Grafo desconexo, centro indefinido." << endl;
         return {};
     }
 
@@ -500,7 +500,7 @@ vector<char> Grafo::periferia()
 
     if (diametro == -1)
     {
-        cout << "Grafo desconexo, periferia indefinida." << endl;
+        cout << "  - Grafo desconexo, periferia indefinida." << endl;
         return {};
     }
 
@@ -522,6 +522,8 @@ vector<char> Grafo::vertices_de_articulacao()
     cout << "Metodo nao implementado" << endl;
     return {};
 }
+
+
 
 void Grafo::_tokenizationDAV(string line)
 {
@@ -546,9 +548,9 @@ void Grafo::_tokenizationDAV(string line)
         i++;
         it++;
     }
-    cout << "direcionado: " << this->in_direcionado << endl;
-    cout << "in_aresta: " << this->in_ponderado_aresta << endl;
-    cout << "in_vertice: " << this->in_ponderado_vertice << endl;
+    //cout << "direcionado: " << this->in_direcionado << endl;
+    //cout << "in_aresta: " << this->in_ponderado_aresta << endl;
+    //cout << "in_vertice: " << this->in_ponderado_vertice << endl;
 }
 
 void Grafo::_tokenizationOrdem(string line)
@@ -933,17 +935,42 @@ void Grafo::imprimirAgm(Grafo *grafo)
     // Verifica se o grafo é nulo
     if (grafo == nullptr)
     {
-        cout << "Grafo nulo." << endl;
+        cout << "  - Grafo nulo." << endl;
         return;
     }
 
     // Pega os vértices
-    cout << "Vertices: ";
+    cout << "  - Vertices selecionados: ";
     for (No *no : grafo->lista_adj)
     {
-        cout << no->id << " ";
+        if (no == grafo->lista_adj.back())
+            cout << no->id << ". ";
+        else
+            cout << no->id << ", ";
     }
     cout << endl;
+
+    //imprime lista de adjacência no formato a: b,c,d
+    cout << "  - Lista de adjacencia da AGM: " << endl;
+    for (No *no : grafo->lista_adj)
+    {
+        cout << "     " << no->id << ": ";
+        //se for vazio, imprime vazio
+        if (no->arestas.empty())
+        {
+            cout << "null" << endl;
+            continue;
+        }
+        for (Aresta *aresta : no->arestas)
+        {
+            if (aresta == no->arestas.back())
+                cout << aresta->id_no_alvo;
+            else
+                cout << aresta->id_no_alvo << " -> ";
+        }
+        cout << endl;
+    }
+
 
     // Cria um vetor só para fazer as ligações de arestas
     vector<string> arestas_str;
@@ -965,33 +992,32 @@ void Grafo::imprimirAgm(Grafo *grafo)
         }
     }
 
-    cout << "Arestas: [";
-    for (size_t i = 0; i < arestas_str.size(); i++)
-    {
-        cout << arestas_str[i];
-        if (i < arestas_str.size() - 1)
-            cout << ", ";
-    }
-    cout << "]" << endl;
+    // // cout << "Arestas: [";
+    // for (size_t i = 0; i < arestas_str.size(); i++)
+    // {
+    //     //cout << arestas_str[i];
+    //     //if (i < arestas_str.size() - 1)
+    //         //cout << ", ";
+    // }
+    // // cout << "]" << endl;
 
     // Aqui será feita a soma dos pesos detalhada
-    cout << "Soma dos pesos: ";
+    cout << "  - Soma dos pesos: ";
     bool primeiro = true;
 
-    for (No *no : grafo->lista_adj)
-    {
-        for (Aresta *aresta : no->arestas)
-        {
-            if (grafo->in_direcionado || no->id < aresta->id_no_alvo)
-            {
-                if (!primeiro)
-                    cout << " + ";
-                cout << aresta->peso << " (" << no->id << "-" << aresta->id_no_alvo << ")";
-                primeiro = false;
-            }
-        }
-    }
+    // for (No *no : grafo->lista_adj)
+    // {
+    //     for (Aresta *aresta : no->arestas)
+    //     {
+    //         if (grafo->in_direcionado || no->id < aresta->id_no_alvo)
+    //         {
+    //             if (!primeiro)
+    //                 cout << " + ";
+    //             cout << aresta->peso << " (" << no->id << "-" << aresta->id_no_alvo << ")";
+    //             primeiro = false;
+    //         }
+    //     }
+    // }
 
-    cout << " = " << soma_pesos << endl
-         << endl;
+    cout << soma_pesos << endl << endl;
 }
