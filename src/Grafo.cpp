@@ -167,7 +167,7 @@ vector<char> Grafo::caminho_minimo_dijkstra(int id_no_a, int id_no_b)
 
 vector<char> Grafo::caminho_minimo_floyd(char id_no, char id_no_b) 
 {
-    if(!this->in_ponderado_aresta) throw invalid_argument("informe um grafo ponderado");
+    if(!this->in_ponderado_aresta) throw invalid_argument("Informe um Grafo Ponderado!!");
 
     vector<vector<int>> caminho_minimo (this->ordem, vector<int>(this->ordem));
     vector<vector<char>> predecessores (this->ordem, vector<char>(this->ordem));

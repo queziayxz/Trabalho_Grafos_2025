@@ -187,42 +187,47 @@ void Gerenciador::comandos(Grafo* grafo) {
             char id_no_2 = get_id_entrada();
             valida_entrada_id_no(id_no_2, grafo);
 
-            vector<char> caminho_minimo_floyd = grafo->caminho_minimo_floyd(id_no_1, id_no_2);
-            cout << "  Informacoes do caminho minimo (Floyd) entre '" << id_no_1 << "' e '" << id_no_2 << "':" << endl;
-
-            if (caminho_minimo_floyd.empty()) {
-                cout << "  - Nao existe um caminho possivel entre os nos '" << id_no_1 << "' e '" << id_no_2 << "'. "<< endl << endl;
-                break;
-            } else {
-                
-                int soma_pesos = 0;
-
-                // Será calculada a soma dos pesos
-                for (size_t i = 1; i < caminho_minimo_floyd.size(); i++) {
-                    No* no = grafo->getNoForId(caminho_minimo_floyd[i-1]);
-                    for (Aresta* aresta : no->arestas) {
-                        if (aresta->id_no_alvo == caminho_minimo_floyd[i]) {
-                            soma_pesos += aresta->peso;
-                            break;
+            try {
+                vector<char> caminho_minimo_floyd = grafo->caminho_minimo_floyd(id_no_1, id_no_2);
+                cout << "  Informacoes do caminho minimo (Floyd) entre '" << id_no_1 << "' e '" << id_no_2 << "':" << endl;
+    
+                if (caminho_minimo_floyd.empty()) {
+                    cout << "  - Nao existe um caminho possivel entre os nos '" << id_no_1 << "' e '" << id_no_2 << "'. "<< endl << endl;
+                    break;
+                } else {
+                    
+                    int soma_pesos = 0;
+    
+                    // Será calculada a soma dos pesos
+                    for (size_t i = 1; i < caminho_minimo_floyd.size(); i++) {
+                        No* no = grafo->getNoForId(caminho_minimo_floyd[i-1]);
+                        for (Aresta* aresta : no->arestas) {
+                            if (aresta->id_no_alvo == caminho_minimo_floyd[i]) {
+                                soma_pesos += aresta->peso;
+                                break;
+                            }
                         }
                     }
+    
+                    cout << "  - Caminho dado por: ";
+                    for(int i = 0; i < caminho_minimo_floyd.size(); i++) {
+                        cout << caminho_minimo_floyd[i] << "; ";
+                        if(i < caminho_minimo_floyd.size()-1) cout << ", ";
+                    }
+    
+                    cout << endl <<  "  - Custo Total: " << soma_pesos << "." << endl;
+    
                 }
-
-                cout << "  - Caminho dado por: ";
-                for(int i = 0; i < caminho_minimo_floyd.size(); i++) {
-                    cout << caminho_minimo_floyd[i] << "; ";
-                    if(i < caminho_minimo_floyd.size()-1) cout << ", ";
+                cout << endl;
+    
+                if (pergunta_imprimir_arquivo("caminho_minimo_floyd.txt")) {
+                    grafo->imprimir_caminho_minimo(caminho_minimo_floyd, "caminho_minimo_floyd.txt");
+                    cout << endl << endl << "> Impressao em arquivo realizada! (saidas/caminho_minimo_floyd.txt)" << endl << endl;
                 }
-
-                cout << endl <<  "  - Custo Total: " << soma_pesos << "." << endl;
-
+            } catch(invalid_argument& e) {
+                cout << "ERROR: " << e.what() << endl;
             }
-            cout << endl;
 
-            if (pergunta_imprimir_arquivo("caminho_minimo_floyd.txt")) {
-                grafo->imprimir_caminho_minimo(caminho_minimo_floyd, "caminho_minimo_floyd.txt");
-                cout << endl << endl << "> Impressao em arquivo realizada! (saidas/caminho_minimo_floyd.txt)" << endl << endl;
-            }
 
             break;
         }
