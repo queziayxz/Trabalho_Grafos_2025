@@ -53,6 +53,7 @@ public:
     void fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado);
     void matriz_floyd_warshall(vector<vector<int>> &matriz_distancias, int n);
     void matriz_floyd(vector<vector<int>> &matriz_distancias, vector<vector<char>> &predecessores);
+    int getIndice(char id_no);
     
     void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
     void imprimir_base(const vector<char> &fecho, ofstream& arquivo);

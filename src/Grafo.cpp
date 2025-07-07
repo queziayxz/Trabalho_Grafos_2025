@@ -549,9 +549,6 @@ void Grafo::_tokenizationDAV(string line)
         i++;
         it++;
     }
-    //cout << "direcionado: " << this->in_direcionado << endl;
-    //cout << "in_aresta: " << this->in_ponderado_aresta << endl;
-    //cout << "in_vertice: " << this->in_ponderado_vertice << endl;
 }
 
 void Grafo::_tokenizationOrdem(string line)
@@ -573,8 +570,6 @@ void Grafo::_tokenizationVertices(ifstream &ifs)
         vertice->visitado = false;
         this->lista_adj.push_back(vertice);
     }
-    //cout << "vertice 3 - id: " << this->lista_adj.at(2)->id << endl;
-    //cout << "vertice 3 - peso: " << this->lista_adj.at(2)->peso << endl;
 }
 
 /*
@@ -611,13 +606,6 @@ void Grafo::_tokenizationArestas(ifstream &ifs)
             }
         }
     }
-
-    // cout << "vertices vizinhos de " << this->lista_adj[0]->id << ": ";
-    // for (Aresta *ares : this->lista_adj[0]->arestas)
-    // {
-    //     cout << ares->id_no_alvo << ", ";
-    // }
-    // cout << endl;
 }
 
 No *Grafo::getNoForId(int id_no)
@@ -635,8 +623,6 @@ int Grafo::getPesoAresta(No* no, char id_alvo)
 {
     for(Aresta* aresta : no->arestas) {
         if(aresta->id_no_alvo == id_alvo) {
-            // cout << "no: " << no->id << endl;
-            // cout << "id alvo: " << aresta->id_no_alvo << endl;
             return aresta->peso;
         }
     }
@@ -755,28 +741,34 @@ void Grafo::matriz_floyd(vector<vector<int>> &matriz_distancias, vector<vector<c
 vector<char> Grafo::getCaminho(vector<vector<char>> predecessores, char id_no_a, char id_no_b)
 {
     vector<char> caminho;
-    // char line = predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id]
 
-    //cout << "[]" << id_no_a - this->lista_adj[0]->id << endl;
-    //cout << "[]" << id_no_b - this->lista_adj[0]->id << endl;
-    //cout << "teste: " << predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id] << endl;
-
-    if(predecessores[abs(id_no_a - this->lista_adj[0]->id)][abs(id_no_b - this->lista_adj[0]->id)] == id_no_a) {
-        caminho.push_back(predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id]);
+    int index_a = getIndice(id_no_a);
+    int index_b = getIndice(id_no_b);
+  
+    if(predecessores[index_a][index_b] == id_no_a) {
+        caminho.push_back(predecessores[index_a][index_b]);
         return caminho;
     } 
-    if(predecessores[abs(id_no_a - this->lista_adj[0]->id)][abs(id_no_b - this->lista_adj[0]->id)] == '-') {
+    if(predecessores[index_a][index_b] == '-') {
         return caminho;
     } 
     else {
-        // cout << "entrou: " << predecessores[id_no_a - this->lista_adj[0]->id][id_no_b - this->lista_adj[0]->id] << endl;
-        // cout << "id a: " << id_no_a << endl;
-        // cout << "id b: " << id_no_b << endl;
-        caminho = getCaminho(predecessores,predecessores[abs(id_no_a - this->lista_adj[0]->id)][abs(id_no_b - this->lista_adj[0]->id)],id_no_b);
+        caminho = getCaminho(predecessores,predecessores[index_a][index_b],id_no_b);
         caminho.push_back(id_no_a);
 
     }
     return caminho;
+}
+
+int Grafo::getIndice(char id_no)
+{
+    for(int i = 0; i < this->lista_adj.size(); i++) {
+        if(this->lista_adj[i]->id == id_no) {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 int Grafo::excentricidade(char id_no)
@@ -803,8 +795,6 @@ int Grafo::excentricidade(char id_no)
     {
         if (matriz_distancias[indice][j] < INT_MAX / 2 && matriz_distancias[indice][j] > 0)
             excentricidade = max(excentricidade, matriz_distancias[indice][j]);
-        // cout << "distancia de " << id_no << " para " << lista_adj[j]->id << ": " << matriz_distancias[indice][j] << endl;
-        // cout << "excentricidade: " << excentricidade << endl;
     }
 
     return excentricidade;
