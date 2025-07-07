@@ -776,7 +776,6 @@ vector<char> Grafo::getCaminho(vector<vector<char>> predecessores, char id_no_a,
         caminho.push_back(id_no_a);
 
     }
-    
     return caminho;
 }
 
