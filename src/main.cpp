@@ -1,6 +1,10 @@
 #include <iostream>
 #include "Gerenciador.h"
 
+//Emerson Caneschi Coelho de Souza
+//Emmanuel Gomes Nassif
+//Quezia Emanuelly da Silva Oliveira
+
 using namespace std;
 int main(int argc, char *argv[])
 {

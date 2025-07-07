@@ -5,6 +5,10 @@
 #include "Grafo.h"
 #include <climits>
 
+//Emerson Caneschi Coelho de Souza
+//Emmanuel Gomes Nassif
+//Quezia Emanuelly da Silva Oliveira
+
 Grafo::Grafo()
 {
 }
@@ -208,14 +212,12 @@ vector<char> Grafo::caminho_minimo_floyd(char id_no, char id_no_b)
 
 Grafo *Grafo::arvore_geradora_minima_prim(vector<char> ids_nos)
 {
-
     if (!ehConexo(ids_nos))
     {
         cout << "  - Subgrafo nao eh conexo." << endl;
         return nullptr;
     }
 
-    // Faz as verificações para facilitar o processo
     Grafo *agm = new Grafo();
     agm->in_direcionado = false;
     agm->in_ponderado_aresta = true;
@@ -245,7 +247,12 @@ Grafo *Grafo::arvore_geradora_minima_prim(vector<char> ids_nos)
             for (Aresta *aresta : no->arestas)
             {
                 char vizinho = aresta->id_no_alvo;
-                if (find(vertices_agm.begin(), vertices_agm.end(), vizinho) == vertices_agm.end())
+
+                // Condição para corrigir problema de: Aceitar vértices fora da agm
+                bool vizinho_nao_inserido = find(vertices_agm.begin(), vertices_agm.end(), vizinho) == vertices_agm.end();
+                bool vizinho_esta_no_subgrafo = find(ids_nos.begin(), ids_nos.end(), vizinho) != ids_nos.end();
+
+                if (vizinho_nao_inserido && vizinho_esta_no_subgrafo)
                 {
                     if (aresta->peso < menor_peso)
                     {
@@ -264,7 +271,6 @@ Grafo *Grafo::arvore_geradora_minima_prim(vector<char> ids_nos)
             return nullptr;
         }
 
-        // Adiciona a aresta ao novo grafo
         No *noOrigem = agm->getNoForId(origem);
         No *noDestino = agm->getNoForId(destino);
 
@@ -290,6 +296,7 @@ Grafo *Grafo::arvore_geradora_minima_prim(vector<char> ids_nos)
     agm->ordem = agm->lista_adj.size();
     return agm;
 }
+
 
 Grafo *Grafo::arvore_geradora_minima_kruskal(vector<char> ids_nos)
 {

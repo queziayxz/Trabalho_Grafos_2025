@@ -5,6 +5,10 @@
 #include "Grafo.h"
 #include <algorithm>
 
+//Emerson Caneschi Coelho de Souza
+//Emmanuel Gomes Nassif
+//Quezia Emanuelly da Silva Oliveira
+
 using namespace std;
 class Gerenciador {
 public:

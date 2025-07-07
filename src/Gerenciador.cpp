@@ -8,6 +8,9 @@
 #include <cmath>
 #include <algorithm>
 
+//Emerson Caneschi Coelho de Souza
+//Emmanuel Gomes Nassif
+//Quezia Emanuelly da Silva Oliveira
 
 void Gerenciador::comandos(Grafo* grafo) {
     cout << endl << "**************** MENU DE COMANDOS ****************" << endl << endl;
