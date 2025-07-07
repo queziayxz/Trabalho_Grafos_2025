@@ -20,6 +20,7 @@ class Grafo {
         void _tokenizationArestas(ifstream& ifs);
 
         //No* getNoForId(int id_no);
+        Aresta* getArestaForIdAlvo(No* no, char id_alvo);
 
 public:
     Grafo(char* fileName);
@@ -29,7 +30,7 @@ public:
     vector<char> fecho_transitivo_direto(int id_no); // a
     vector<char> fecho_transitivo_indireto(int id_no); // b
     vector<char> caminho_minimo_dijkstra(int id_no_a, int id_no_b); // c
-    vector<char> caminho_minimo_floyd(int id_no, int id_no_b); // d
+    vector<char> caminho_minimo_floyd(char id_no, char id_no_b); // d
     Grafo* arvore_geradora_minima_prim(vector<char> ids_nos); // e
     Grafo* arvore_geradora_minima_kruskal(vector<char> ids_nos); // f
     Grafo* arvore_caminhamento_profundidade(int id_no); // g
@@ -46,13 +47,17 @@ public:
 
     //No* getNoForId(char id);
     No* getNoForId(int id_no);
+    int getPesoAresta(No* no, char id_alvo);
+    vector<char> getCaminho(vector<vector<char>> predecessores, char id_no_a, char id_no_b);
 
     void fecho_busca_em_profundidade(char id, set<char> &visitados, vector<char> &resultado);
-    void matriz_floyd_warshall(vector<vector<int>> &matriz, int n);
+    void matriz_floyd_warshall(vector<vector<int>> &matriz_distancias, int n);
+    void matriz_floyd(vector<vector<int>> &matriz_distancias, vector<vector<char>> &predecessores);
     
     void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
     void imprimir_base(const vector<char> &fecho, ofstream& arquivo);
     void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
+    void imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo);
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
     void imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquivo);
     void naoVisitado();
