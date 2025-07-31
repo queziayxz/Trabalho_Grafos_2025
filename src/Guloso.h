@@ -1,26 +1,23 @@
-//Emerson Caneschi Coelho de Souza
-//Emmanuel Gomes Nassif
-//Quezia Emanuelly da Silva Oliveira
+// Emerson Caneschi Coelho de Souza
+// Emmanuel Gomes Nassif
+// Quezia Emanuelly da Silva Oliveira
 
 #ifndef GULOSO_H
 #define GULOSO_H
 
-#include "No.h"
 #include "Grafo.h"
-#include "Aresta.h"
-
-#include <iostream>
 #include <vector>
 #include <set>
 
 using namespace std;
 
-class Guloso {
-    private:
-
-    public:
-        Guloso();
-        ~Guloso();
+class Guloso
+{
+public:
+    static vector<char> conjunto_dominante_peso_minimo(Grafo *grafo);
+    static set<char> calcula_vizinhanca_fechada(No *v);
+    static set<char> dominados_por(No *v);
+    static set<char> vizinhanca_fechada(No *v);
 };
 
-#endif //GULOSO_H
+#endif // GULOSO_H

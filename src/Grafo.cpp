@@ -860,6 +860,17 @@ void Grafo::fecho_busca_em_profundidade(char id, set<char> &visitados, vector<ch
 
 /////
 
+set<char> Grafo::calcula_vizinhanca_fechada(No *v)
+{
+    set<char> vizinhanca;
+    vizinhanca.insert(v->id);
+
+    for (Aresta *a : v->arestas)
+        vizinhanca.insert(a->id_no_alvo);
+
+    return vizinhanca;
+}
+
 void Grafo::novoNo(char id, int peso)
 {
     // Verifica se já existe

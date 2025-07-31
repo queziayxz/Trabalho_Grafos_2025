@@ -70,6 +70,7 @@ public:
     void salvar_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
     int excentricidade(char id_no);
     bool ehConexo(vector<char> &vertices);
+    set<char> calcula_vizinhanca_fechada(No *v);
 
     int ordem;
     bool in_direcionado;
