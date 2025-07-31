@@ -16,31 +16,33 @@ using namespace std;
 
 const double INF = numeric_limits<double>::infinity();
 
-vector<char> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
+pair<vector<char>, int> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
 {
     set<char> conjunto_dominante; // (1)
+    int peso = 0;                 // (2)
 
     set<char> vertices_nao_dominados; // (2)
-    for (No *no : grafo->lista_adj) 
+    for (No *no : grafo->lista_adj)
         vertices_nao_dominados.insert(no->id);
 
     // loop principal (3)
     while (!vertices_nao_dominados.empty())
     {
-        double melhorRazao = INF; // inicializa a melhor razão como infinito (4)
+        double melhorRazao = INF;    // inicializa a melhor razão como infinito (4)
         No *melhorVertice = nullptr; // inicializa o melhor vértice como nulo (5)
 
-        // // debug
+        // debug
         // cout << "Vertices nao dominados: ";
         // for (char c : vertices_nao_dominados)
         //     cout << c << " ";
         // cout << endl;
-        // // fim do debug
+        // fim do debug
 
         // para cada vertice, se ele nao estiver no conjunto dominante:
-        for (No *v : grafo->lista_adj) 
+        for (No *v : grafo->lista_adj)
         {
-            if (conjunto_dominante.count(v->id)) continue; // (6)
+            if (!vertices_nao_dominados.count(v->id))
+                continue; // (6)
 
             // define vizinhanca fechada
             set<char> vizinhanca_fechada = grafo->calcula_vizinhanca_fechada(v); // (7)
@@ -53,33 +55,37 @@ vector<char> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
                     novosDominados.insert(u);
 
             if (!novosDominados.empty()) //(9)
-{
-                double razao = static_cast<double>(v->peso) / novosDominados.size(); // força o resultado a ser double (10)
+            {
+        
+                double razao =  static_cast<double>(v->peso) / novosDominados.size(); // (10)
 
-                // cout << " - Vertice " << v->id << " domina " << novosDominados.size() << " novos, razao = " << razao << std::endl;
+                // cout << " - Vertice " << v->id << " domina " << novosDominados.size() << " novos, razao = " << razao << " | Dominados: ";
+                // for (char c : novosDominados)
+                //     cout << c << " ";
+                // cout << endl;
 
                 if (razao < melhorRazao) // (11)
                 {
                     melhorRazao = razao; // (12)
-                    melhorVertice = v; // (13)
+                    melhorVertice = v;   // (13)
                 }
             }
         }
 
         if (melhorVertice == nullptr) //(17)
-            break; //(18)
+            break;                    //(18)
 
         // cout << " --> Escolhido o vertice: " << melhorVertice->id << " com razao " << melhorRazao << endl << endl;
 
         // adiciona o vertice ao conjunto dominante
         conjunto_dominante.insert(melhorVertice->id); //(20)
+        peso += melhorVertice->peso;
 
         // remove os vertices dominados do conjunto de vertices nao dominados
         for (char id : grafo->calcula_vizinhanca_fechada(melhorVertice)) //(21)
             vertices_nao_dominados.erase(id);
-
     }
 
-    //converte o set para vector e retorna (precisa ser vector para manter compatibilidade com o resto do código do T1)
-    return vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()); //(23)
+    // converte o set para vector e retorna (precisa ser vector para manter compatibilidade com o resto do código do T1)
+    return make_pair(vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()), peso);
 }

@@ -7,7 +7,7 @@ x 6
 y 17
 z 78
 h 1
-a b 2
-b c 1
-x y 1
-y z 3
+a b 
+b c 
+x y 
+y z 

@@ -567,15 +567,19 @@ void Gerenciador::comandos(Grafo *grafo)
         cout << "**** OPCAO SELECIONADA: Algoritmo Guloso para MWDS ****" << endl
              << endl;
 
-        // Marca o início
+        // início
         auto inicio = chrono::high_resolution_clock::now();
 
-        // Executa o algoritmo
-        vector<char> conjunto_dominante = Guloso::conjunto_dominante_peso_minimo(grafo);
+        // executa o algoritmo guloso para encontrar o conjunto dominante de peso mínimo
+        auto resultado = Guloso::conjunto_dominante_peso_minimo(grafo);
+        vector<char> conjunto_dominante = resultado.first;
+        int peso_total = resultado.second;
 
-        // Marca o fim
+        // fim
         auto fim = chrono::high_resolution_clock::now();
-        auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio);
+        auto duracao = chrono::duration_cast<chrono::milliseconds>(fim - inicio);
+
+        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " ms." << endl << endl;
 
         cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo selecionado: " << endl;
         if (conjunto_dominante.empty())
@@ -594,7 +598,7 @@ void Gerenciador::comandos(Grafo *grafo)
                     cout << id << ", ";
             }
             cout << "};" << endl;
-            cout << "  - Tempo de execucao: " << duracao.count() << " us" << endl << endl;
+            cout << "  - Peso total do conjunto dominante: " << peso_total << "." << endl;
         }
         break;
     }
