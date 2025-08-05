@@ -609,7 +609,8 @@ void Gerenciador::comandos(Grafo *grafo)
         cout << endl;
         cout << "**** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo para MWDS ****" << endl
              << endl;
-        // vector<char> conjunto_dominante = Guloso::conjunto_dominante_peso_minimo(grafo);
+        Guloso* randomizadoAdaptativo = new Guloso();
+        randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo);
 
         break;
     }

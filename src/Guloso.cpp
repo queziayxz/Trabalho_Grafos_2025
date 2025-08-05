@@ -12,9 +12,22 @@
 #include <climits>
 #include <set>
 #include <algorithm>
+#include <random>
+
+
 using namespace std;
 
 const double INF = numeric_limits<double>::infinity();
+
+Guloso::Guloso()
+{
+
+}
+
+Guloso::~Guloso()
+{
+
+}
 
 pair<vector<char>, int> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
 {
@@ -88,4 +101,121 @@ pair<vector<char>, int> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
 
     // converte o set para vector e retorna (precisa ser vector para manter compatibilidade com o resto do código do T1)
     return make_pair(vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()), peso);
+}
+
+void Guloso::gulosoRandomizadoAdaptativo(Grafo *grafo)
+{
+    set<char> conjunto_dominante;
+    set<char> conjunto_dos_dominados;
+    vector<No*> lista_cadidatos = calculaListaCandidatosOrdenada(grafo->lista_adj,conjunto_dos_dominados);
+    double alfa = 0.3;
+
+    random_device rd;
+    mt19937 gen(rd());
+
+    int index = 0;
+    int peso = 0;
+
+    cout << "lista de candidatos inicial: "<< endl;
+    
+    for(No* no : lista_cadidatos) {
+        cout << no->id << endl;
+    }
+
+    cout << endl;
+    
+    while(!lista_cadidatos.empty()) {
+        uniform_int_distribution<> distr(0, alfa*lista_cadidatos.size()-1);
+        index = distr(gen);
+
+        cout << "index: " << index << endl;
+        conjunto_dominante.insert(lista_cadidatos[index]->id);
+
+        peso += lista_cadidatos[index]->peso;
+        
+        cout << "lista depois de tirar o no " << lista_cadidatos[index]->id << endl;
+        
+        lista_cadidatos = atualizaListaCandidatos(lista_cadidatos, lista_cadidatos[index], conjunto_dos_dominados);
+
+        for(No* no : lista_cadidatos) {
+            cout << no->id << endl;
+        }
+    }
+
+    cout << "peso final: " << peso << endl;
+    cout << "conjunto dominante: "<< endl;
+    
+    for(char no : conjunto_dominante) {
+        cout << no << endl;
+    }
+}
+
+//ordena usando o algoritmo insertion sort
+vector<No*> Guloso::calculaListaCandidatosOrdenada(vector<No*> listaVertices, set<char> conjunto_dos_dominados)
+{
+    No* aux = new No();
+
+    double razaoAtual = 0;
+    double razaoAnterior = 0;
+
+    for(int i = 0; i < listaVertices.size()-1; i++) {
+        for(int j = i+1; j > 0; j--) {
+            razaoAtual = static_cast<double>(listaVertices[j]->peso)/getVizinhosNaoDominados(listaVertices[j],conjunto_dos_dominados);
+            razaoAnterior = static_cast<double>(listaVertices[j-1]->peso)/getVizinhosNaoDominados(listaVertices[j-1],conjunto_dos_dominados);
+
+            // cout << "razao do vertice " << listaVertices[j]->id << ": " << razaoAtual << endl;
+            // cout << "razao do vertice " << listaVertices[j-1]->id << ": " << razaoAnterior << endl;
+
+            if(razaoAtual <  razaoAnterior) {
+                //faz o shift da chave
+                aux = listaVertices[j];
+                listaVertices[j] = listaVertices[j-1];
+                listaVertices[j-1] = aux;
+            } else {
+                break;
+            }
+        }   
+    }
+
+    return listaVertices;
+}
+
+vector<No*> Guloso::atualizaListaCandidatos(vector<No*>listaVertices, No* no, set<char>&conjunto_dos_dominados)
+{
+    No* aux = new No();
+
+    // cout << "size: " << listaVertices.size() << endl;
+
+    if(listaVertices.size()) {
+        for(Aresta* aresta : no->arestas) {
+            for(int i = 0; i < listaVertices.size(); i++) {
+                if(listaVertices[i]->id == aresta->id_no_alvo || listaVertices[i]->id == no->id) {
+                    aux = listaVertices[i];
+                    listaVertices[i] = listaVertices[listaVertices.size()-1];
+                    listaVertices[listaVertices.size()-1] = aux;
+                    listaVertices.pop_back();
+                    conjunto_dos_dominados.insert(aux->id);
+                }
+            }
+        }
+    }
+
+    if(!listaVertices.size()) {
+        return listaVertices;
+    } else {
+        return calculaListaCandidatosOrdenada(listaVertices,conjunto_dos_dominados);
+    }
+}
+
+int Guloso::getVizinhosNaoDominados(No* no, set<char> conjunto_dos_dominados)
+{
+    int count = 0;
+
+    for(Aresta* aresta : no->arestas) {
+        if(!conjunto_dos_dominados.count(aresta->id_no_alvo)) {
+            count++;
+        }
+    }
+
+    return count;
 }
