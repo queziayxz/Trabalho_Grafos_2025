@@ -563,9 +563,12 @@ void Gerenciador::comandos(Grafo *grafo)
     }
     case 'i':
     {
-        cout << endl;
-        cout << "**** OPCAO SELECIONADA: Algoritmo Guloso para MWDS ****" << endl
-             << endl;
+        cout << endl << "**** OPCAO SELECIONADA: Algoritmo Guloso para o problema do MWDS ****" << endl << endl;
+
+        if(!grafo->in_ponderado_vertice) {
+            cout << "  O algoritmo guloso para o problema do MWDS nao se aplica para grafos nao ponderados." << endl << endl;
+            break;
+        }
 
         // início
         auto inicio = chrono::high_resolution_clock::now();
@@ -577,15 +580,14 @@ void Gerenciador::comandos(Grafo *grafo)
 
         // fim
         auto fim = chrono::high_resolution_clock::now();
-        auto duracao = chrono::duration_cast<chrono::milliseconds>(fim - inicio);
+        auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio);
 
-        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " ms." << endl << endl;
-
+        // logs de saida
+        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " micros." << endl << endl;
         cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo selecionado: " << endl;
         if (conjunto_dominante.empty())
         {
-            cout << "  - O grafo nao possui conjunto dominante." << endl
-                 << endl;
+            cout << "  - O grafo nao possui conjunto dominante." << endl << endl;
         }
         else
         {
@@ -599,7 +601,43 @@ void Gerenciador::comandos(Grafo *grafo)
             }
             cout << "};" << endl;
             cout << "  - Peso total do conjunto dominante: " << peso_total << "." << endl;
+
+
+            //testes - apagar quando decidir o algoritmo final
+            cout << endl << "*Algoritmo do artigo adaptado: " << endl;
+            auto inicio_artigo = chrono::high_resolution_clock::now();
+            // executa o algoritmo guloso adaptado do artigo para encontrar o conjunto dominante de peso
+            auto resultado_artigo = Guloso::adaptado_artigo(grafo);
+            auto fim_artigo = chrono::high_resolution_clock::now();
+            auto duracao_artigo = chrono::duration_cast<chrono::microseconds>(fim_artigo - inicio_artigo);
+            vector<char> conjunto_dominante_artigo = resultado_artigo.first;
+            int peso_total_artigo = resultado_artigo.second;
+            cout << "  Tempo de execucao do algoritmo adaptado do artigo: " << duracao_artigo.count() << " micros." << endl;
+            cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo adaptado do artigo: " << endl;
+            cout << "  - Conjunto dominante de peso minimo (artigo adaptado): D = {";
+            for (char id : conjunto_dominante_artigo)
+            {
+                if (id == conjunto_dominante_artigo.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
+            }
+            cout << "};" << endl;
+            cout << "  - Peso total do conjunto dominante (artigo adaptado): " << peso_total_artigo << "." << endl;
+            if (peso_total_artigo < peso_total)
+                cout << "  - O algoritmo adaptado do artigo encontrou um conjunto dominante de peso menor." << endl;
+            else if (peso_total_artigo > peso_total)
+                cout << "  - O algoritmo adaptado do artigo encontrou um conjunto dominante de peso maior." << endl;
+            else
+                cout << "  - O algoritmo adaptado do artigo encontrou um conjunto dominante de mesmo peso." << endl;
+            // fim do teste
         }
+
+        if (pergunta_imprimir_arquivo("guloso_conjunto_dominante_peso_minimo.txt")) {
+            grafo->imprimir_conjunto_guloso(conjunto_dominante, "guloso_conjunto_dominante_peso_minimo.txt");
+            cout << endl << "> Impressao em arquivo realizada! (saidas/guloso_conjunto_dominante_peso_minimo.txt)" << endl << endl;
+        }
+
         break;
     }
 

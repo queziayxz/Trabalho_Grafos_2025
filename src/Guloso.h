@@ -15,6 +15,7 @@ class Guloso
 {
 public:
     static pair<vector<char>, int> conjunto_dominante_peso_minimo(Grafo *grafo);
+    static pair<vector<char>, int> adaptado_artigo(Grafo *grafo);
     static set<char> calcula_vizinhanca_fechada(No *v);
     static set<char> dominados_por(No *v);
     static set<char> vizinhanca_fechada(No *v);

@@ -1180,3 +1180,16 @@ void Grafo::imprimir_caminho_minimo(const vector<char>& caminhoMin, const string
 
     arquivo.close();
 }
+
+//imprimir conjunto guloso
+void Grafo::imprimir_conjunto_guloso(const vector<char>& conjunto, const string& nome_arquivo) {
+    
+    string caminho = "saidas/" + nome_arquivo;
+    ofstream arquivo(caminho);
+    
+    for(char id : conjunto) {
+        arquivo << id << endl;
+    }
+
+    arquivo.close();
+}
