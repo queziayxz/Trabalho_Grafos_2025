@@ -31,12 +31,12 @@ pair<vector<char>, int> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
         double melhorRazao = INF;    // inicializa a melhor razão como infinito (4)
         No *melhorVertice = nullptr; // inicializa o melhor vértice como nulo (5)
 
-        // debug
+        // //debug
         // cout << "Vertices nao dominados: ";
         // for (char c : vertices_nao_dominados)
         //     cout << c << " ";
         // cout << endl;
-        // fim do debug
+        // //fim do debug
 
         // para cada vertice, se ele nao estiver no conjunto dominante:
         for (No *v : grafo->lista_adj)
@@ -59,7 +59,7 @@ pair<vector<char>, int> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
         
                 double razao =  static_cast<double>(v->peso) / novosDominados.size(); // (10)
 
-                // cout << " - Vertice " << v->id << " domina " << novosDominados.size() << " novos, razao = " << razao << " | Dominados: ";
+                // cout << " - Vertice " << v->id << " domina " << novosDominados.size() << " nos, razao = " << razao << " | Dominados: ";
                 // for (char c : novosDominados)
                 //     cout << c << " ";
                 // cout << endl;
