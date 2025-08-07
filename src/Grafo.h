@@ -63,7 +63,8 @@ public:
     void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
     void imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo);
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
-    void imprimir_grafo_arquivo(const Grafo& grafo, const string& nome_arquivo);
+    void imprimir_conjunto_guloso(const vector<char> &conjunto, const string &nome_arquivo);
+    void imprimir_grafo_arquivo(const Grafo &grafo, const string &nome_arquivo);
     void naoVisitado();
     void novoNo(char id, int peso);
     void imprimirAgm(Grafo *grafo);

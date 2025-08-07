@@ -22,6 +22,7 @@ class Guloso
         ~Guloso();
 
         static pair<vector<char>, int> conjunto_dominante_peso_minimo(Grafo *grafo);
+        static pair<vector<char>, int> adaptado_artigo(Grafo *grafo);
         void gulosoRandomizadoAdaptativo(Grafo *grafo);
         static set<char> calcula_vizinhanca_fechada(No *v);
         static set<char> dominados_por(No *v);
