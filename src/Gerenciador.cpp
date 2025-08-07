@@ -2,6 +2,8 @@
 #include <fstream>
 #include "Grafo.h"
 #include "Guloso.h"
+#include "GulosoRandomizado.h"
+#include "GulosoReativo.h"
 #include <sstream>
 #include <map>
 #include <set>
@@ -647,16 +649,107 @@ void Gerenciador::comandos(Grafo *grafo)
         cout << endl;
         cout << "**** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo para MWDS ****" << endl
              << endl;
-        // vector<char> conjunto_dominante = Guloso::conjunto_dominante_peso_minimo(grafo);
+         if(!grafo->in_ponderado_vertice) {
+            cout << "  O algoritmo guloso para o problema do MWDS nao se aplica para grafos nao ponderados." << endl << endl;
+            break;
+        }
+        // Parâmetros do GRASP Reativo
+        int numIter = 250;      // Número total de iterações
+        double alfa = 0.1; // Valor de alpha
+
+        // início
+        auto inicio = chrono::high_resolution_clock::now();
+
+        // executa o algoritmo guloso para encontrar o conjunto dominante de peso mínimo
+        auto resultado = GulosoRandomizado::conjunto_dominante(grafo,numIter, alfa);
+        vector<char> conjunto_dominante = resultado.first;
+        int peso_total = resultado.second;
+
+        // fim
+        auto fim = chrono::high_resolution_clock::now();
+        auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio);
+
+        // logs de saida
+        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " micros." << endl << endl;
+        cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo selecionado: " << endl;
+        if (conjunto_dominante.empty())
+        {
+            cout << "  - O grafo nao possui conjunto dominante." << endl << endl;
+        }
+        else
+        {
+            cout << "  - Conjunto dominante de peso minimo: D = {";
+            for (char id : conjunto_dominante)
+            {
+                if (id == conjunto_dominante.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
+            }
+            cout << "};" << endl;
+            cout << "  - Peso total do conjunto dominante: " << peso_total << "." << endl;
+        }
+
+        if (pergunta_imprimir_arquivo("guloso_randomizado_conjunto_dominante_peso_minimo.txt")) {
+            grafo->imprimir_conjunto_guloso(conjunto_dominante, "guloso_randomizado_conjunto_dominante_peso_minimo.txt");
+            cout << endl << "> Impressao em arquivo realizada! (saidas/guloso_randomizado_conjunto_dominante_peso_minimo.txt)" << endl << endl;
+        }
 
         break;
+        
     }
     case 'k':
     {
         cout << endl;
         cout << "**** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo Reativo para MWDS ****" << endl
              << endl;
-        // vector<char> conjunto_dominante = Guloso::conjunto_dominante_peso_minimo(grafo);
+        if(!grafo->in_ponderado_vertice) {
+            cout << "  O algoritmo guloso para o problema do MWDS nao se aplica para grafos nao ponderados." << endl << endl;
+            break;
+        }
+
+        // Parâmetros do GRASP Reativo
+        int numIter = 500;      // Número total de iterações
+        int bloco = 10;         // Atualizar probabilidades a cada 10 iterações
+        vector<double> alfas = {0.01, 0.05, 0.1}; // Valores de alpha
+
+        // início
+        auto inicio = chrono::high_resolution_clock::now();
+
+        // executa o algoritmo guloso para encontrar o conjunto dominante de peso mínimo
+        auto resultado = GulosoReativo::conjunto_dominante(grafo,numIter, bloco, alfas);
+        vector<char> conjunto_dominante = resultado.first;
+        int peso_total = resultado.second;
+
+        // fim
+        auto fim = chrono::high_resolution_clock::now();
+        auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio);
+
+        // logs de saida
+        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " micros." << endl << endl;
+        cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo selecionado: " << endl;
+        if (conjunto_dominante.empty())
+        {
+            cout << "  - O grafo nao possui conjunto dominante." << endl << endl;
+        }
+        else
+        {
+            cout << "  - Conjunto dominante de peso minimo: D = {";
+            for (char id : conjunto_dominante)
+            {
+                if (id == conjunto_dominante.back())
+                    cout << id;
+                else
+                    cout << id << ", ";
+            }
+            cout << "};" << endl;
+            cout << "  - Peso total do conjunto dominante: " << peso_total << "." << endl;
+        }
+
+        if (pergunta_imprimir_arquivo("guloso_reativo_conjunto_dominante_peso_minimo.txt")) {
+            grafo->imprimir_conjunto_guloso(conjunto_dominante, "guloso_reativo_conjunto_dominante_peso_minimo.txt");
+            cout << endl << "> Impressao em arquivo realizada! (saidas/guloso_reativo_conjunto_dominante_peso_minimo.txt)" << endl << endl;
+        }
 
         break;
     }
