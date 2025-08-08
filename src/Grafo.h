@@ -64,6 +64,7 @@ public:
     void imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo);
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
     void imprimir_conjunto_guloso(const vector<char> &conjunto, const string &nome_arquivo);
+    void imprimir_conjunto_guloso_randomizado(ofstream&arquivo, pair<vector<char>, vector<double>> dados, int iteracao);
     void imprimir_grafo_arquivo(const Grafo &grafo, const string &nome_arquivo);
     void naoVisitado();
     void novoNo(char id, int peso);

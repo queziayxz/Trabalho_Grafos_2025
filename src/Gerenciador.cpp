@@ -648,10 +648,16 @@ void Gerenciador::comandos(Grafo *grafo)
         cout << "**** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo para MWDS ****" << endl
              << endl;
         Guloso* randomizadoAdaptativo = new Guloso();
+
+        ofstream ofs;
+        ofs.open("saidas/guloso_randomizado_adaptativo.txt", ios_base::out | ios_base::trunc);
+        
         double mediaPesos = 0.0;
         long long mediaDuracao = 0;
-
+        
         cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
+        
+        ofs << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl; //escreve no arquivo
         
         for(int i = 0; i < 10; i++) {
             
@@ -666,6 +672,10 @@ void Gerenciador::comandos(Grafo *grafo)
             
             vector<char> conjunto_dominante = resultado_randomizado.first;
             vector<double> valores = resultado_randomizado.second;
+            
+            resultado_randomizado.second.push_back(duracao_alg.count());
+
+            grafo->imprimir_conjunto_guloso_randomizado(ofs,resultado_randomizado,i);
             
             mediaPesos += valores[0];
             
@@ -690,7 +700,12 @@ void Gerenciador::comandos(Grafo *grafo)
         
         cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
         cout << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl;
+        
+        ofs << endl;
+        ofs << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl; // escreve no arquivo
+        ofs << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl; //escreve no arquivo
        
+        ofs.close();
 
         break;
     }
