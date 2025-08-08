@@ -648,6 +648,7 @@ void Gerenciador::comandos(Grafo *grafo)
         cout << "**** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo para MWDS ****" << endl
              << endl;
         Guloso* randomizadoAdaptativo = new Guloso();
+        double mediaPesos = 0.0;
 
         cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
 
@@ -659,6 +660,8 @@ void Gerenciador::comandos(Grafo *grafo)
     
             vector<char> conjunto_dominante = resultado_randomizado.first;
             vector<double> valores = resultado_randomizado.second;
+
+            mediaPesos += valores[0];
     
             cout << "     Conjunto Dominante de Peso Minimo:" << endl;
             cout << "     D = { ";
@@ -674,9 +677,12 @@ void Gerenciador::comandos(Grafo *grafo)
     
             cout << "     Peso Total: " << valores[0] << endl;
             cout << "     Alfa Utilizado: " << valores[1] << endl;
-
+            
             cout << endl;
         }
+        
+        cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
+       
 
         break;
     }
