@@ -649,20 +649,26 @@ void Gerenciador::comandos(Grafo *grafo)
              << endl;
         Guloso* randomizadoAdaptativo = new Guloso();
         double mediaPesos = 0.0;
+        long long mediaDuracao = 0;
 
         cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
-
+        
         for(int i = 0; i < 10; i++) {
-
+            
             cout << "  --> Iteracao: " << i+1 << endl;
-
+            
+            auto inicio_alg = chrono::high_resolution_clock::now();
             auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo);
-    
+            auto fim_alg = chrono::high_resolution_clock::now();
+            
+            auto duracao_alg = chrono::duration_cast<chrono::microseconds>(fim_alg - inicio_alg);
+            mediaDuracao += duracao_alg.count();
+            
             vector<char> conjunto_dominante = resultado_randomizado.first;
             vector<double> valores = resultado_randomizado.second;
-
+            
             mediaPesos += valores[0];
-    
+            
             cout << "     Conjunto Dominante de Peso Minimo:" << endl;
             cout << "     D = { ";
             for(char id : conjunto_dominante) {
@@ -672,16 +678,18 @@ void Gerenciador::comandos(Grafo *grafo)
                     cout << id << ", ";
                 }
             }
-    
+            
             cout << "}" << endl;
-    
+            
             cout << "     Peso Total: " << valores[0] << endl;
             cout << "     Alfa Utilizado: " << valores[1] << endl;
+            cout << "     Duracao do Algoritmo: " << duracao_alg.count() << " micros" << endl;
             
             cout << endl;
         }
         
         cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
+        cout << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl;
        
 
         break;
