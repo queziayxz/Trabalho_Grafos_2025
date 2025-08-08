@@ -196,7 +196,7 @@ pair<vector<char>, int> Guloso::adaptado_artigo(Grafo *grafo)
     return make_pair(vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()), peso_total);
 }
 
-void Guloso::gulosoRandomizadoAdaptativo(Grafo *grafo)
+pair<vector<char>, vector<double>> Guloso::gulosoRandomizadoAdaptativo(Grafo *grafo)
 {
     set<char> conjunto_dominante;
     set<char> conjunto_dos_dominados;
@@ -207,40 +207,35 @@ void Guloso::gulosoRandomizadoAdaptativo(Grafo *grafo)
     mt19937 gen(rd());
 
     int index = 0;
-    int peso = 0;
-
-    cout << "lista de candidatos inicial: "<< endl;
+    int peso_total = 0;
     
-    for(No* no : lista_cadidatos) {
-        cout << no->id << endl;
-    }
-
-    cout << endl;
-    
-    while(!lista_cadidatos.empty()) {
+    while(conjunto_dos_dominados.size() < grafo->lista_adj.size()) {
         uniform_int_distribution<> distr(0, alfa*lista_cadidatos.size()-1);
         index = distr(gen);
 
-        cout << "index: " << index << endl;
+        // cout << "index: " << index << endl;
+
+        if(conjunto_dominante.count(lista_cadidatos[index]->id)) break;
+
         conjunto_dominante.insert(lista_cadidatos[index]->id);
-
-        peso += lista_cadidatos[index]->peso;
+        peso_total += lista_cadidatos[index]->peso;
         
-        cout << "lista depois de tirar o no " << lista_cadidatos[index]->id << endl;
-        
-        lista_cadidatos = atualizaListaCandidatos(lista_cadidatos, lista_cadidatos[index], conjunto_dos_dominados);
+        // cout << "lista depois de tirar o no " << lista_cadidatos[index]->id << endl;
 
-        for(No* no : lista_cadidatos) {
-            cout << no->id << endl;
-        }
+        No* noEscolhido = new No();
+        noEscolhido = lista_cadidatos[index];
+        lista_cadidatos[index] = lista_cadidatos[lista_cadidatos.size()-1];
+        lista_cadidatos[lista_cadidatos.size()-1] = noEscolhido;
+        lista_cadidatos.pop_back();
+
+        lista_cadidatos = atualizaListaCandidatos(lista_cadidatos, noEscolhido , conjunto_dos_dominados);
     }
 
-    cout << "peso final: " << peso << endl;
-    cout << "conjunto dominante: "<< endl;
-    
-    for(char no : conjunto_dominante) {
-        cout << no << endl;
-    }
+    vector<double> resultado;
+    resultado.push_back(peso_total);
+    resultado.push_back(alfa);
+
+    return make_pair(vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()), resultado);
 }
 
 //ordena usando o algoritmo insertion sort
@@ -253,13 +248,13 @@ vector<No*> Guloso::calculaListaCandidatosOrdenada(vector<No*> listaVertices, se
 
     for(int i = 0; i < listaVertices.size()-1; i++) {
         for(int j = i+1; j > 0; j--) {
-            razaoAtual = static_cast<double>(listaVertices[j]->peso)/getVizinhosNaoDominados(listaVertices[j],conjunto_dos_dominados);
-            razaoAnterior = static_cast<double>(listaVertices[j-1]->peso)/getVizinhosNaoDominados(listaVertices[j-1],conjunto_dos_dominados);
+            razaoAtual = static_cast<double>(getVizinhosNaoDominados(listaVertices[j],conjunto_dos_dominados))/listaVertices[j]->peso;
+            razaoAnterior = static_cast<double>(getVizinhosNaoDominados(listaVertices[j-1],conjunto_dos_dominados))/listaVertices[j-1]->peso;
 
             // cout << "razao do vertice " << listaVertices[j]->id << ": " << razaoAtual << endl;
             // cout << "razao do vertice " << listaVertices[j-1]->id << ": " << razaoAnterior << endl;
 
-            if(razaoAtual <  razaoAnterior) {
+            if(razaoAtual > razaoAnterior) {
                 //faz o shift da chave
                 aux = listaVertices[j];
                 listaVertices[j] = listaVertices[j-1];
@@ -275,29 +270,25 @@ vector<No*> Guloso::calculaListaCandidatosOrdenada(vector<No*> listaVertices, se
 
 vector<No*> Guloso::atualizaListaCandidatos(vector<No*>listaVertices, No* no, set<char>&conjunto_dos_dominados)
 {
-    No* aux = new No();
-
-    // cout << "size: " << listaVertices.size() << endl;
-
-    if(listaVertices.size()) {
-        for(Aresta* aresta : no->arestas) {
-            for(int i = 0; i < listaVertices.size(); i++) {
-                if(listaVertices[i]->id == aresta->id_no_alvo || listaVertices[i]->id == no->id) {
-                    aux = listaVertices[i];
-                    listaVertices[i] = listaVertices[listaVertices.size()-1];
-                    listaVertices[listaVertices.size()-1] = aux;
-                    listaVertices.pop_back();
-                    conjunto_dos_dominados.insert(aux->id);
-                }
-            }
+    // cout << "size dominados antes: " << conjunto_dos_dominados.size() << endl;
+    // conjunto_dos_dominados.insert(no->id);
+    
+    for(Aresta* aresta : no->arestas) {
+        // cout << "domina: " << aresta->id_no_alvo << " ";
+        if(!conjunto_dos_dominados.count(aresta->id_no_alvo)) {
+            conjunto_dos_dominados.insert(aresta->id_no_alvo);
         }
     }
 
-    if(!listaVertices.size()) {
-        return listaVertices;
-    } else {
-        return calculaListaCandidatosOrdenada(listaVertices,conjunto_dos_dominados);
+    if(!conjunto_dos_dominados.count(no->id)) {
+        conjunto_dos_dominados.insert(no->id);
     }
+    
+    // cout << endl;
+
+    // cout << "size dominados depois: " << conjunto_dos_dominados.size() << endl;
+
+    return calculaListaCandidatosOrdenada(listaVertices,conjunto_dos_dominados);
 }
 
 int Guloso::getVizinhosNaoDominados(No* no, set<char> conjunto_dos_dominados)
