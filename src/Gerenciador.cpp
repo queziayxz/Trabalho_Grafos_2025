@@ -707,6 +707,8 @@ void Gerenciador::comandos(Grafo *grafo)
        
         ofs.close();
 
+        cout << endl << " * O Arquivo 'guloso_randomizado_adaptativo.txt' foi Gerado com os Resultados" << endl;
+
         break;
     }
     case 'k':
