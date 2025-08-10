@@ -1,0 +1,75 @@
+ * Resultados Obtidos nas 10 Iteracoes: 
+
+  --> Iteracao: 1
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 3037 micros
+
+  --> Iteracao: 2
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 0 micros
+
+  --> Iteracao: 3
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 8732 micros
+
+  --> Iteracao: 4
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 7613 micros
+
+  --> Iteracao: 5
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 4532 micros
+
+  --> Iteracao: 6
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 0 micros
+
+  --> Iteracao: 7
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 8054 micros
+
+  --> Iteracao: 8
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 8829 micros
+
+  --> Iteracao: 9
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 5597 micros
+
+  --> Iteracao: 10
+     Conjunto Dominante de Peso Minimo:
+     D = { b, d, f, h, i, j, m, p, r, t, u }
+     Peso Total: 573
+     Alfa Utilizado: 0.3
+     Duracao do Algoritmo: 4056 micros
+
+
+ --> Media dos Pesos Obtidos: 573
+ --> Media da Duracao Total das Iteracoes: 5045 micros
