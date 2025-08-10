@@ -1193,3 +1193,27 @@ void Grafo::imprimir_conjunto_guloso(const vector<char>& conjunto, const string&
 
     arquivo.close();
 }
+
+//imprimir conjunto guloso randomizado
+void Grafo::imprimir_conjunto_guloso_randomizado(ofstream&arquivo, pair<vector<char>, vector<double>> dados, int iteracao) {
+
+    arquivo << "  --> Iteracao: " << iteracao+1 << endl;
+    
+    arquivo << "     Conjunto Dominante de Peso Minimo:" << endl;
+    arquivo << "     D = { ";
+    for(char id : dados.first) {
+        if (id == dados.first.back()) {
+            arquivo << id << " ";
+        } else {
+            arquivo << id << ", ";
+        }
+    }
+    
+    arquivo << "}" << endl;
+    
+    arquivo << "     Peso Total: " << dados.second[0] << endl;
+    arquivo << "     Alfa Utilizado: " << dados.second[1] << endl;
+    arquivo << "     Duracao do Algoritmo: " << dados.second[2] << " micros" << endl; //duracao
+    
+    arquivo << endl;
+}
