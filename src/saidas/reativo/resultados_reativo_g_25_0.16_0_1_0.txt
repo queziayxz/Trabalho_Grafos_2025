@@ -1,0 +1,223 @@
+=== RESULTADOS GRASP REATIVO ===
+Grafo: g_25_0.16_0_1_0.txt
+Configuracoes testadas: 10
+Execucoes por configuracao: 10
+=================================
+
+
+CONFIGURACAO 1/10
+Alfas: [0.01, 0.02, 0.05]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 362647 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 360849 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 349200 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 352510 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 355924 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 345668 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 332507 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 328934 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 328600 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 332529 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 344936.80 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 2/10
+Alfas: [0.05, 0.10, 0.15]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 325329 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 329437 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 327323 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 330426 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 327768 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 328774 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 326505 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 327078 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 328896 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 328857 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 328039.30 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 3/10
+Alfas: [0.10, 0.15, 0.20]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 338823 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 336182 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 332982 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 335586 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 352391 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 415127 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 360765 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 334398 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 339019 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 379163 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 352443.60 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 4/10
+Alfas: [0.10, 0.20, 0.30]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 383447 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 391087 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 356814 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 354986 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 353651 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 345771 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 399132 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 361463 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 372067 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 374547 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 369296.50 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 5/10
+Alfas: [0.15, 0.25, 0.35]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 385338 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 477415 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 407935 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 364528 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 365584 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 479075 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 482776 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 380891 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 447431 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 440669 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 423164.20 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 6/10
+Alfas: [0.20, 0.30, 0.40]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 412149 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 402257 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 443754 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 375968 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 511305 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 451793 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 387849 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 364346 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 367592 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 360482 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 407749.50 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 7/10
+Alfas: [0.25, 0.35, 0.45]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 370536 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 379548 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 544518 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 515113 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 391187 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 376001 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 365037 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 475916 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 534993 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 372942 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 432579.10 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 8/10
+Alfas: [0.30, 0.40, 0.50]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 379218 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 419882 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 501162 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 517859 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 393496 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 406430 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 511474 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 515195 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 398422 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 402553 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 444569.10 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 9/10
+Alfas: [0.35, 0.45, 0.55]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 489693 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 594524 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 480007 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 391184 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 564097 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 481172 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 411433 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 392794 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 536558 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 596641 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 493810.30 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+CONFIGURACAO 10/10
+Alfas: [0.40, 0.50, 0.60]
+--------------------------------
+Exec 1: Peso = 229, Tempo = 536321 μs, Tamanho = 7
+Exec 2: Peso = 229, Tempo = 450745 μs, Tamanho = 7
+Exec 3: Peso = 229, Tempo = 444853 μs, Tamanho = 7
+Exec 4: Peso = 229, Tempo = 527843 μs, Tamanho = 7
+Exec 5: Peso = 229, Tempo = 497293 μs, Tamanho = 7
+Exec 6: Peso = 229, Tempo = 499306 μs, Tamanho = 7
+Exec 7: Peso = 229, Tempo = 531458 μs, Tamanho = 7
+Exec 8: Peso = 229, Tempo = 412153 μs, Tamanho = 7
+Exec 9: Peso = 229, Tempo = 409880 μs, Tamanho = 7
+Exec 10: Peso = 229, Tempo = 393677 μs, Tamanho = 7
+
+RESUMO CONFIGURACAO:
+  - Media pesos: 229.00
+  - Melhor peso: 229
+  - Media tempo: 470352.90 μs
+  - Melhor conjunto: {b, h, i, j, p, r, v}
+--------------------------------
+
+
+=== RESULTADO GLOBAL ===
+Melhor peso encontrado: 229.00
+Configuracao dos alfas: [0.01, 0.02, 0.05]
+Melhor conjunto: {b, h, i, j, p, r, v}
+Tamanho: 7 vertices

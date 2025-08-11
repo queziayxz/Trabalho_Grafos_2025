@@ -1,0 +1,146 @@
+ * Resultados Obtidos nas 20 Iteracoes: 
+
+  --> Iteracao: 1
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 11338 micros
+
+  --> Iteracao: 2
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 7651 micros
+
+  --> Iteracao: 3
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 5103 micros
+
+  --> Iteracao: 4
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 5667 micros
+
+  --> Iteracao: 5
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 4054 micros
+
+  --> Iteracao: 6
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 5606 micros
+
+  --> Iteracao: 7
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 9611 micros
+
+  --> Iteracao: 8
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 3919 micros
+
+  --> Iteracao: 9
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 10984 micros
+
+  --> Iteracao: 10
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 7458 micros
+
+  --> Iteracao: 11
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 12464 micros
+
+  --> Iteracao: 12
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 7131 micros
+
+  --> Iteracao: 13
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 7827 micros
+
+  --> Iteracao: 14
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 9380 micros
+
+  --> Iteracao: 15
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 8954 micros
+
+  --> Iteracao: 16
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 11338 micros
+
+  --> Iteracao: 17
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 11275 micros
+
+  --> Iteracao: 18
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 8511 micros
+
+  --> Iteracao: 19
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 8725 micros
+
+  --> Iteracao: 20
+     Conjunto Dominante de Peso Minimo:
+     D = { b, i, j, k, l, p, r, v }
+     Peso Total: 235
+     Alfa Utilizado: 0.04
+     Duracao do Algoritmo: 6889 micros
+
+
+ --> Melhor Peso Obtido: 235
+ --> Media dos Pesos Obtidos: 235
+ --> Media da Duracao Total das Iteracoes: 8194.25 micros

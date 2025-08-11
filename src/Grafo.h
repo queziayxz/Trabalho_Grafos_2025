@@ -57,13 +57,13 @@ public:
     void matriz_floyd_warshall(vector<vector<int>> &matriz_distancias, int n);
     void matriz_floyd(vector<vector<int>> &matriz_distancias, vector<vector<char>> &predecessores);
     int getIndice(char id_no);
-    
+    No* getNo(char id);
     void fecho_busca_em_profundidade(Grafo *grafo, char id_no);
     void imprimir_base(const vector<char> &fecho, ofstream& arquivo);
     void imprimir_fecho_em_arquivo(const vector<char> &fecho, const string &nome_arquivo);
     void imprimir_arvore_caminho_profundidade_em_arquivo(const string nome_arquivo);
     void imprimir_caminho_minimo(const vector<char>& agm, const string& nome_arquivo);
-    void imprimir_conjunto_guloso(const vector<char> &conjunto, const string &nome_arquivo);
+    void imprimir_conjunto_guloso(const vector<char>& conjunto, double peso_total, const string& nome_arquivo);
     void imprimir_conjunto_guloso_randomizado(ofstream&arquivo, pair<vector<char>, vector<double>> dados, int iteracao);
     void imprimir_grafo_arquivo(const Grafo &grafo, const string &nome_arquivo);
     void naoVisitado();
@@ -78,6 +78,7 @@ public:
     bool in_direcionado;
     bool in_ponderado_aresta;
     bool in_ponderado_vertice;
+    string filename;
 
 };
 

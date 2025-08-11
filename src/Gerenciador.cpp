@@ -1,8 +1,9 @@
 #include "Gerenciador.h"
-#include <fstream>
 #include "Grafo.h"
 #include "Guloso.h"
 #include "GulosoReativo.h"
+
+#include <fstream>
 #include <sstream>
 #include <map>
 #include <set>
@@ -10,6 +11,8 @@
 #include <cmath>
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
+#include <numeric> 
 
 using namespace std;
 using namespace std::chrono;
@@ -564,7 +567,7 @@ void Gerenciador::comandos(Grafo *grafo)
     }
     case 'i':
     {
-        cout << endl << "**** OPCAO SELECIONADA: Algoritmo Guloso para o problema do MWDS ****" << endl << endl;
+        cout << endl << "** OPCAO SELECIONADA: Algoritmo Guloso para o problema do MWDS **" << endl << endl;
 
         if(!grafo->in_ponderado_vertice) {
             cout << "  O algoritmo guloso para o problema do MWDS nao se aplica para grafos nao ponderados." << endl << endl;
@@ -581,10 +584,10 @@ void Gerenciador::comandos(Grafo *grafo)
 
         // fim
         auto fim = chrono::high_resolution_clock::now();
-        auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio);
+        auto duracao = chrono::duration<double>(fim - inicio);
 
         // logs de saida
-        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " micros." << endl << endl;
+        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " segundos." << endl << endl;
         cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo selecionado: " << endl;
         if (conjunto_dominante.empty())
         {
@@ -602,46 +605,17 @@ void Gerenciador::comandos(Grafo *grafo)
             }
             cout << "};" << endl;
             cout << "  - Peso total do conjunto dominante: " << peso_total << "." << endl;
+            cout << endl;
 
-
-            //testes - apagar quando decidir o algoritmo final
-            cout << endl << "*Algoritmo do artigo adaptado: " << endl;
-            auto inicio_artigo = chrono::high_resolution_clock::now();
-            // executa o algoritmo guloso adaptado do artigo para encontrar o conjunto dominante de peso
-            auto resultado_artigo = Guloso::adaptado_artigo(grafo);
-            auto fim_artigo = chrono::high_resolution_clock::now();
-            auto duracao_artigo = chrono::duration_cast<chrono::microseconds>(fim_artigo - inicio_artigo);
-            vector<char> conjunto_dominante_artigo = resultado_artigo.first;
-            int peso_total_artigo = resultado_artigo.second;
-            cout << "  Tempo de execucao do algoritmo adaptado do artigo: " << duracao_artigo.count() << " micros." << endl;
-            cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo adaptado do artigo: " << endl;
-            cout << "  - Conjunto dominante de peso minimo (artigo adaptado): D = {";
-            for (char id : conjunto_dominante_artigo)
-            {
-                if (id == conjunto_dominante_artigo.back())
-                    cout << id;
-                else
-                    cout << id << ", ";
-            }
-            cout << "};" << endl;
-            cout << "  - Peso total do conjunto dominante (artigo adaptado): " << peso_total_artigo << "." << endl;
-            if (peso_total_artigo < peso_total)
-                cout << "  - O algoritmo adaptado do artigo encontrou um conjunto dominante de peso menor." << endl;
-            else if (peso_total_artigo > peso_total)
-                cout << "  - O algoritmo adaptado do artigo encontrou um conjunto dominante de peso maior." << endl;
-            else
-                cout << "  - O algoritmo adaptado do artigo encontrou um conjunto dominante de mesmo peso." << endl;
-            // fim do teste
         }
 
         if (pergunta_imprimir_arquivo("guloso_conjunto_dominante_peso_minimo.txt")) {
-            grafo->imprimir_conjunto_guloso(conjunto_dominante, "guloso_conjunto_dominante_peso_minimo.txt");
+            grafo->imprimir_conjunto_guloso(conjunto_dominante, peso_total, "guloso_conjunto_dominante_peso_minimo.txt");
             cout << endl << "> Impressao em arquivo realizada! (saidas/guloso_conjunto_dominante_peso_minimo.txt)" << endl << endl;
         }
 
         break;
     }
-
     case 'j':
     {
 
@@ -650,73 +624,90 @@ void Gerenciador::comandos(Grafo *grafo)
              << endl;
         Guloso* randomizadoAdaptativo = new Guloso();
 
-        ofstream ofs;
-        ofs.open("saidas/guloso_randomizado_adaptativo.txt", ios_base::out | ios_base::trunc);
-        
+        double alfa = 0.04;
         double mediaPesos = 0.0;
         long long mediaDuracao = 0;
+        int iteracoes = 20;
+
+        //transforma alfa para duas casas decimais na string
+        ostringstream ss;
+        ss << std::fixed << setprecision(2) << alfa;
+        string alfaString = ss.str();
+
+        double melhorPeso = numeric_limits<double>::infinity();
+
+        string path = grafo->filename.substr(grafo->filename.find_last_of("/")+1);
+
+        ofstream ofs;
+        ofs.open("saidas/randomizado/alfa_"+alfaString+"_"+path, ios_base::out | ios_base::trunc);
         
-        cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
+        // cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
         
-        ofs << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl; //escreve no arquivo
+        // auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo, alfa);
+        ofs << " * Resultados Obtidos nas " << iteracoes << " Iteracoes: " << endl << endl; //escreve no arquivo
         
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < iteracoes; i++) {
             
-            cout << "  --> Iteracao: " << i+1 << endl;
+            // cout << "  --> Iteracao: " << i+1 << endl;
             
             auto inicio_alg = chrono::high_resolution_clock::now();
-            auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo);
+            auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo,alfa);
             auto fim_alg = chrono::high_resolution_clock::now();
             
-            auto duracao_alg = chrono::duration_cast<chrono::microseconds>(fim_alg - inicio_alg);
+            auto duracao_alg = chrono::duration<double>(fim_alg - inicio_alg);
             mediaDuracao += duracao_alg.count();
             
             vector<char> conjunto_dominante = resultado_randomizado.first;
             vector<double> valores = resultado_randomizado.second;
             
+            resultado_randomizado.second.push_back(alfa);
             resultado_randomizado.second.push_back(duracao_alg.count());
 
             grafo->imprimir_conjunto_guloso_randomizado(ofs,resultado_randomizado,i);
             
             mediaPesos += valores[0];
-            
-            cout << "     Conjunto Dominante de Peso Minimo:" << endl;
-            cout << "     D = { ";
-            for(char id : conjunto_dominante) {
-                if (id == conjunto_dominante.back()) {
-                    cout << id << " ";
-                } else {
-                    cout << id << ", ";
-                }
+
+            if(valores[0] < melhorPeso) {
+                melhorPeso = valores[0];
             }
             
-            cout << "}" << endl;
+            // cout << "     Conjunto Dominante de Peso Minimo:" << endl;
+            // cout << "     D = { ";
+            // for(char id : conjunto_dominante) {
+            //     if (id == conjunto_dominante.back()) {
+            //         cout << id << " ";
+            //     } else {
+            //         cout << id << ", ";
+            //     }
+            // }
             
-            cout << "     Peso Total: " << valores[0] << endl;
-            cout << "     Alfa Utilizado: " << valores[1] << endl;
-            cout << "     Duracao do Algoritmo: " << duracao_alg.count() << " micros" << endl;
+            // cout << "}" << endl;
             
-            cout << endl;
+            // cout << "     Peso Total: " << valores[0] << endl;
+            // cout << "     Alfa Utilizado: " << valores[1] << endl;
+            // cout << "     Duracao do Algoritmo: " << duracao_alg.count() << " segundos" << endl;
+            
+            // cout << endl;
         }
         
-        cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
-        cout << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl;
+        // cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
+        // cout << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " segundos" << endl;
         
         ofs << endl;
-        ofs << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl; // escreve no arquivo
-        ofs << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl; //escreve no arquivo
+        ofs << " --> Melhor Peso Obtido: " << static_cast<int>(melhorPeso) << endl; // escreve no arquivo
+        ofs << " --> Media dos Pesos Obtidos: " << mediaPesos/iteracoes << endl; // escreve no arquivo
+        ofs << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/iteracoes << " segundos" << endl; //escreve no arquivo
        
         ofs.close();
 
-        cout << endl << " * O Arquivo 'guloso_randomizado_adaptativo.txt' foi Gerado com os Resultados" << endl;
+        cout << endl << " * O Arquivo 'alfa_" << alfaString << "_" << path << "' foi Gerado com os Resultados" << endl;
 
         break;
-        
     }
     case 'k':
     {
         cout << endl;
-        cout << "**** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo Reativo para MWDS ****" << endl
+        cout << "** OPCAO SELECIONADA: Algoritmo Guloso Randomizado Adaptativo Reativo para MWDS **" << endl
              << endl;
         if(!grafo->in_ponderado_vertice) {
             cout << "  O algoritmo guloso para o problema do MWDS nao se aplica para grafos nao ponderados." << endl << endl;
@@ -726,45 +717,70 @@ void Gerenciador::comandos(Grafo *grafo)
         // Parâmetros do GRASP Reativo
         int numIter = 500;      // Número total de iterações
         int bloco = 10;         // Atualizar probabilidades a cada 10 iterações
-        vector<double> alfas = {0.01, 0.05, 0.1}; // Valores de alpha
+        vector<double> alfas = {0.01, 0.1, 0.3}; // Valores de alpha
+        int numExecucoes = 10;  // Número de execuções para a média
 
-        // início
-        auto inicio = chrono::high_resolution_clock::now();
+        // Variáveis para estatísticas
+        vector<int> pesosTotais;
+        vector<long long> temposExecucao;
+        vector<vector<double>> historicoAlfas; // Armazena as probabilidades finais de alfas em cada execução
 
-        // executa o algoritmo guloso para encontrar o conjunto dominante de peso mínimo
-        auto resultado = GulosoReativo::conjunto_dominante(grafo,numIter, bloco, alfas);
-        vector<char> conjunto_dominante = resultado.first;
-        int peso_total = resultado.second;
+        // Executa 10 vezes
+        for (int exec = 0; exec < numExecucoes; exec++) {
+            cout << "\n=== EXECUCAO " << exec + 1 << " ===" << endl;
 
-        // fim
-        auto fim = chrono::high_resolution_clock::now();
-        auto duracao = chrono::duration_cast<chrono::microseconds>(fim - inicio);
+            // Medição do tempo
+            auto inicio = chrono::high_resolution_clock::now();
+            auto resultado = GulosoReativo::conjunto_dominante_reativo(grafo, numIter, bloco, alfas);
+            auto fim = chrono::high_resolution_clock::now();
+            auto duracao = chrono::duration<double>(fim - inicio);
 
-        // logs de saida
-        cout << "  Tempo de execucao do algoritmo: " << duracao.count() << " micros." << endl << endl;
-        cout << "  Informacoes do conjunto dominante de peso minimo para o algoritmo selecionado: " << endl;
-        if (conjunto_dominante.empty())
-        {
-            cout << "  - O grafo nao possui conjunto dominante." << endl << endl;
-        }
-        else
-        {
-            cout << "  - Conjunto dominante de peso minimo: D = {";
-            for (char id : conjunto_dominante)
-            {
-                if (id == conjunto_dominante.back())
-                    cout << id;
-                else
-                    cout << id << ", ";
+            // Armazena resultados
+            vector<char> conjunto_dominante = resultado.first;
+            int peso_total = resultado.second;
+            pesosTotais.push_back(peso_total);
+            temposExecucao.push_back(duracao.count());
+
+            // Imprime resultados da execução atual (igual ao original)
+            cout << "  Tempo de execucao: " << duracao.count() << " segundos" << endl << endl;
+            cout << "  Informacoes do conjunto dominante de peso minimo: " << endl;
+            if (conjunto_dominante.empty()) {
+                cout << "  - O grafo nao possui conjunto dominante." << endl << endl;
+            } else {
+                cout << "  - Conjunto dominante: D = {";
+                for (char id : conjunto_dominante) {
+                    if (id == conjunto_dominante.back())
+                        cout << id;
+                    else
+                        cout << id << ", ";
+                }
+                cout << "};" << endl;
+                cout << "  - Peso total: " << peso_total << "." << endl;
             }
-            cout << "};" << endl;
-            cout << "  - Peso total do conjunto dominante: " << peso_total << "." << endl;
+
+            // Opcional: Registrar as probabilidades finais dos alfas (se disponíveis)
+            // (Você precisaria modificar o método conjunto_dominante para retornar também o vetor P final)
+            // historicoAlfas.push_back(P_final); 
         }
 
-        if (pergunta_imprimir_arquivo("guloso_reativo_conjunto_dominante_peso_minimo.txt")) {
-            grafo->imprimir_conjunto_guloso(conjunto_dominante, "guloso_reativo_conjunto_dominante_peso_minimo.txt");
-            cout << endl << "> Impressao em arquivo realizada! (saidas/guloso_reativo_conjunto_dominante_peso_minimo.txt)" << endl << endl;
-        }
+        // Cálculo das médias
+        double mediaPesos = accumulate(pesosTotais.begin(), pesosTotais.end(), 0.0) / numExecucoes;
+        double mediaTempos = accumulate(temposExecucao.begin(), temposExecucao.end(), 0.0) / numExecucoes;
+
+        // Exibe estatísticas finais
+        cout << "\n=== RESULTADOS FINAIS (MEDIA DE " << numExecucoes << " EXECUCOES) ===" << endl;
+        cout << "  - Peso medio do conjunto dominante: " << mediaPesos << endl;
+        cout << "  - Tempo medio de execucao: " << mediaTempos << " segundos" << endl;
+
+        // Exemplo de como exibir alfas mais usados (se historicoAlfas estiver disponível)
+        //cout << "  - Alfas mais utilizados: ";
+        //for (const auto& P : historicoAlfas) {
+        //     cout << "[";
+        //     for (double p : P) cout << p << " ";
+        //     cout << "] ";
+        // }
+
+        //colocar o lance de imprimir ele
 
         break;
     }

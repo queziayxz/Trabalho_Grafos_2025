@@ -18,6 +18,8 @@ Grafo::Grafo(char *fileName)
     ifstream ifs;
     ifs.exceptions(std::ios_base::badbit);
 
+    this->filename = fileName;
+
     char relative[50] = "instancias/";
     std::string line;
     int i = 0;
@@ -1181,12 +1183,18 @@ void Grafo::imprimir_caminho_minimo(const vector<char>& caminhoMin, const string
     arquivo.close();
 }
 
+No* Grafo::getNo(char id) {
+    return getNoForId(id);
+}
+
 //imprimir conjunto guloso
-void Grafo::imprimir_conjunto_guloso(const vector<char>& conjunto, const string& nome_arquivo) {
+void Grafo::imprimir_conjunto_guloso(const vector<char>& conjunto, double peso_total, const string& nome_arquivo) {
     
     string caminho = "saidas/" + nome_arquivo;
     ofstream arquivo(caminho);
-    
+
+    arquivo << peso_total << endl;
+
     for(char id : conjunto) {
         arquivo << id << endl;
     }
