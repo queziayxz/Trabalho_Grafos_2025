@@ -1,0 +1,1 @@
+# Aqui irá ficar os arquivos de saída com os dados gerados das iterações do algoritmo guloso randomizado adaptativo
