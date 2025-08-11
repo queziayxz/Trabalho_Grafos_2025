@@ -1,7 +1,8 @@
 #include "Gerenciador.h"
-#include <fstream>
 #include "Grafo.h"
 #include "Guloso.h"
+
+#include <fstream>
 #include <sstream>
 #include <map>
 #include <set>
@@ -9,6 +10,7 @@
 #include <cmath>
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
 
 using namespace std;
 using namespace std::chrono;
@@ -649,22 +651,34 @@ void Gerenciador::comandos(Grafo *grafo)
              << endl;
         Guloso* randomizadoAdaptativo = new Guloso();
 
-        ofstream ofs;
-        ofs.open("saidas/guloso_randomizado_adaptativo.txt", ios_base::out | ios_base::trunc);
-        
+        double alfa = 0.04;
         double mediaPesos = 0.0;
         long long mediaDuracao = 0;
+        int iteracoes = 20;
+
+        //transforma alfa para duas casas decimais na string
+        ostringstream ss;
+        ss << std::fixed << setprecision(2) << alfa;
+        string alfaString = ss.str();
+
+        double melhorPeso = numeric_limits<double>::infinity();
+
+        string path = grafo->filename.substr(grafo->filename.find_last_of("/")+1);
+
+        ofstream ofs;
+        ofs.open("saidas/randomizado/alfa_"+alfaString+"_"+path, ios_base::out | ios_base::trunc);
         
-        cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
+        // cout << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl;
         
-        ofs << " * Resultados Obtidos nas 10 Iteracoes: " << endl << endl; //escreve no arquivo
+        // auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo, alfa);
+        ofs << " * Resultados Obtidos nas " << iteracoes << " Iteracoes: " << endl << endl; //escreve no arquivo
         
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < iteracoes; i++) {
             
-            cout << "  --> Iteracao: " << i+1 << endl;
+            // cout << "  --> Iteracao: " << i+1 << endl;
             
             auto inicio_alg = chrono::high_resolution_clock::now();
-            auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo);
+            auto resultado_randomizado = randomizadoAdaptativo->gulosoRandomizadoAdaptativo(grafo,alfa);
             auto fim_alg = chrono::high_resolution_clock::now();
             
             auto duracao_alg = chrono::duration_cast<chrono::microseconds>(fim_alg - inicio_alg);
@@ -673,41 +687,47 @@ void Gerenciador::comandos(Grafo *grafo)
             vector<char> conjunto_dominante = resultado_randomizado.first;
             vector<double> valores = resultado_randomizado.second;
             
+            resultado_randomizado.second.push_back(alfa);
             resultado_randomizado.second.push_back(duracao_alg.count());
 
             grafo->imprimir_conjunto_guloso_randomizado(ofs,resultado_randomizado,i);
             
             mediaPesos += valores[0];
-            
-            cout << "     Conjunto Dominante de Peso Minimo:" << endl;
-            cout << "     D = { ";
-            for(char id : conjunto_dominante) {
-                if (id == conjunto_dominante.back()) {
-                    cout << id << " ";
-                } else {
-                    cout << id << ", ";
-                }
+
+            if(valores[0] < melhorPeso) {
+                melhorPeso = valores[0];
             }
             
-            cout << "}" << endl;
+            // cout << "     Conjunto Dominante de Peso Minimo:" << endl;
+            // cout << "     D = { ";
+            // for(char id : conjunto_dominante) {
+            //     if (id == conjunto_dominante.back()) {
+            //         cout << id << " ";
+            //     } else {
+            //         cout << id << ", ";
+            //     }
+            // }
             
-            cout << "     Peso Total: " << valores[0] << endl;
-            cout << "     Alfa Utilizado: " << valores[1] << endl;
-            cout << "     Duracao do Algoritmo: " << duracao_alg.count() << " micros" << endl;
+            // cout << "}" << endl;
             
-            cout << endl;
+            // cout << "     Peso Total: " << valores[0] << endl;
+            // cout << "     Alfa Utilizado: " << valores[1] << endl;
+            // cout << "     Duracao do Algoritmo: " << duracao_alg.count() << " micros" << endl;
+            
+            // cout << endl;
         }
         
-        cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
-        cout << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl;
+        // cout << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl;
+        // cout << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl;
         
         ofs << endl;
-        ofs << " --> Media dos Pesos Obtidos: " << mediaPesos/10 << endl; // escreve no arquivo
-        ofs << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/10 << " micros" << endl; //escreve no arquivo
+        ofs << " --> Melhor Peso Obtido: " << static_cast<int>(melhorPeso) << endl; // escreve no arquivo
+        ofs << " --> Media dos Pesos Obtidos: " << mediaPesos/iteracoes << endl; // escreve no arquivo
+        ofs << " --> Media da Duracao Total das Iteracoes: " << static_cast<double>(mediaDuracao)/iteracoes << " micros" << endl; //escreve no arquivo
        
         ofs.close();
 
-        cout << endl << " * O Arquivo 'guloso_randomizado_adaptativo.txt' foi Gerado com os Resultados" << endl;
+        cout << endl << " * O Arquivo 'alfa_" << alfaString << "_" << path << "' foi Gerado com os Resultados" << endl;
 
         break;
     }

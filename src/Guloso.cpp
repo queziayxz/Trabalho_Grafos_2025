@@ -69,7 +69,7 @@ pair<vector<char>, int> Guloso::conjunto_dominante_peso_minimo(Grafo *grafo)
 
             if (!novosDominados.empty()) //(9)
             {
-        
+
                 double razao =  static_cast<double>(v->peso) / novosDominados.size(); // (10)
 
                 // cout << " - Vertice " << v->id << " domina " << novosDominados.size() << " nos, razao = " << razao << " | Dominados: ";
@@ -109,6 +109,8 @@ pair<vector<char>, int> Guloso::adaptado_artigo(Grafo *grafo)
     set<char> conjunto_dominante;
     int peso_total = 0;
 
+    vector<char> dominados;
+
     set<char> vertices_nao_dominados;
     for (No *no : grafo->lista_adj)
         vertices_nao_dominados.insert(no->id);
@@ -117,7 +119,7 @@ pair<vector<char>, int> Guloso::adaptado_artigo(Grafo *grafo)
     while (!vertices_nao_dominados.empty())
     {
         double melhorScore = -INF;
-        
+
         No *melhorVertice = nullptr;
         set<char> dominados_por_melhorVertice;
 
@@ -144,10 +146,10 @@ pair<vector<char>, int> Guloso::adaptado_artigo(Grafo *grafo)
                 // score = número de novos dominados / peso
                 double score = static_cast<double>(novos_dominados.size()) / v->peso;
 
-                // cout << " - Vertice " << v->id << " domina " << novos_dominados.size() << " nos, razao = " << score << " | Dominados: ";
-                // for (char c : novos_dominados)
-                //     cout << c << " ";
-                // cout << endl;
+                cout << " - Vertice " << v->id << " domina " << novos_dominados.size() << " nos, razao = " << score << " | Dominados: ";
+                for (char c : novos_dominados)
+                    cout << c << " ";
+                cout << endl;
 
                 if (score > melhorScore)
                 {
@@ -160,15 +162,25 @@ pair<vector<char>, int> Guloso::adaptado_artigo(Grafo *grafo)
 
         if (melhorVertice == nullptr) break; // Nenhum vértice pode dominar mais
 
-        //cout << " --> Escolhido o vertice: " << melhorVertice->id << " com score " << melhorScore << endl;
+        cout << " --> Escolhido o vertice: " << melhorVertice->id << " com score " << melhorScore << endl;
 
         // Adiciona vértice com melhor score
         conjunto_dominante.insert(melhorVertice->id);
         peso_total += melhorVertice->peso;
 
         // Remove os vértices dominados por ele
-        for (char u : dominados_por_melhorVertice)
+        for (char u : dominados_por_melhorVertice) {
+            dominados.push_back(u);
             vertices_nao_dominados.erase(u);
+        }
+
+        cout << "conjunto dos dominados atualizado depois de retirar o no: " << melhorVertice->id << endl;
+        for(char id : dominados) {
+            cout << id << " ";
+        }
+
+        cout << endl;
+        cout << endl;
 
         //vertices_nao_dominados.erase(melhorVertice->id);
 
@@ -196,44 +208,67 @@ pair<vector<char>, int> Guloso::adaptado_artigo(Grafo *grafo)
     return make_pair(vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()), peso_total);
 }
 
-pair<vector<char>, vector<double>> Guloso::gulosoRandomizadoAdaptativo(Grafo *grafo)
+pair<vector<char>, vector<double>> Guloso::gulosoRandomizadoAdaptativo(Grafo *grafo, double alfa)
 {
     set<char> conjunto_dominante;
     set<char> conjunto_dos_dominados;
     vector<No*> lista_cadidatos = calculaListaCandidatosOrdenada(grafo->lista_adj,conjunto_dos_dominados);
-    double alfa = 0.3;
+    // double alfa = 0.03;
 
     random_device rd;
     mt19937 gen(rd());
 
     int index = 0;
     int peso_total = 0;
-    
+
+    // cout << "lista inicial" << endl;
+    // for(No* no : lista_cadidatos) {
+    //     cout << no->id << " ";
+    // }
+    // cout << endl << endl;
+
     while(conjunto_dos_dominados.size() < grafo->lista_adj.size()) {
-        uniform_int_distribution<> distr(0, alfa*lista_cadidatos.size()-1);
+        uniform_int_distribution<> distr(0, alfa*(lista_cadidatos.size()-1));
         index = distr(gen);
 
-        // cout << "index: " << index << endl;
+        // cout << "mukt: " << (alfa*(lista_cadidatos.size()-1)) << endl;
 
         if(conjunto_dominante.count(lista_cadidatos[index]->id)) break;
 
         conjunto_dominante.insert(lista_cadidatos[index]->id);
         peso_total += lista_cadidatos[index]->peso;
-        
-        // cout << "lista depois de tirar o no " << lista_cadidatos[index]->id << endl;
 
         No* noEscolhido = new No();
         noEscolhido = lista_cadidatos[index];
-        lista_cadidatos[index] = lista_cadidatos[lista_cadidatos.size()-1];
-        lista_cadidatos[lista_cadidatos.size()-1] = noEscolhido;
-        lista_cadidatos.pop_back();
+        // lista_cadidatos[index] = lista_cadidatos[lista_cadidatos.size()-1];
+        // lista_cadidatos[lista_cadidatos.size()-1] = noEscolhido;
+        // lista_cadidatos.pop_back();
 
         lista_cadidatos = atualizaListaCandidatos(lista_cadidatos, noEscolhido , conjunto_dos_dominados);
+
+        // cout << "lista depois de ordenar dominar o no: " << noEscolhido->id << endl;
+        // for(No* no : lista_cadidatos) {
+        //     cout << no->id << " ";
+        // }
+        // cout << endl;
+
+        // cout << "consjunto dos dominados depois de dominar o no: " << noEscolhido->id << endl;
+        // for(char id : conjunto_dos_dominados) {
+        //     cout << id << " ";
+        // }
+        // cout << endl;
     }
+
+    // cout << "consjunto dominante" << endl;
+    // for(char id : conjunto_dominante) {
+    //     cout << id << " ";
+    // }
+    // cout << endl;
+    // cout << "peso total: " << peso_total << endl;
 
     vector<double> resultado;
     resultado.push_back(peso_total);
-    resultado.push_back(alfa);
+    // resultado.push_back(alfa);
 
     return make_pair(vector<char>(conjunto_dominante.begin(), conjunto_dominante.end()), resultado);
 }
@@ -246,8 +281,14 @@ vector<No*> Guloso::calculaListaCandidatosOrdenada(vector<No*> listaVertices, se
     double razaoAtual = 0;
     double razaoAnterior = 0;
 
+    // cout << "size vertices: " << listaVertices.size() << endl;
+
     for(int i = 0; i < listaVertices.size()-1; i++) {
         for(int j = i+1; j > 0; j--) {
+            // int dominados = getVizinhosNaoDominados(listaVertices[j],conjunto_dos_dominados);
+            // cout << "index: " << i << endl;
+            // cout << "vertice " << listaVertices[j]->id << " domina " << dominados << " razao: " << static_cast<double>(dominados)/listaVertices[j]->peso << endl;
+
             razaoAtual = static_cast<double>(getVizinhosNaoDominados(listaVertices[j],conjunto_dos_dominados))/listaVertices[j]->peso;
             razaoAnterior = static_cast<double>(getVizinhosNaoDominados(listaVertices[j-1],conjunto_dos_dominados))/listaVertices[j-1]->peso;
 
@@ -262,7 +303,7 @@ vector<No*> Guloso::calculaListaCandidatosOrdenada(vector<No*> listaVertices, se
             } else {
                 break;
             }
-        }   
+        }
     }
 
     return listaVertices;
@@ -272,7 +313,7 @@ vector<No*> Guloso::atualizaListaCandidatos(vector<No*>listaVertices, No* no, se
 {
     // cout << "size dominados antes: " << conjunto_dos_dominados.size() << endl;
     // conjunto_dos_dominados.insert(no->id);
-    
+
     for(Aresta* aresta : no->arestas) {
         // cout << "domina: " << aresta->id_no_alvo << " ";
         if(!conjunto_dos_dominados.count(aresta->id_no_alvo)) {
@@ -283,7 +324,7 @@ vector<No*> Guloso::atualizaListaCandidatos(vector<No*>listaVertices, No* no, se
     if(!conjunto_dos_dominados.count(no->id)) {
         conjunto_dos_dominados.insert(no->id);
     }
-    
+
     // cout << endl;
 
     // cout << "size dominados depois: " << conjunto_dos_dominados.size() << endl;
@@ -295,10 +336,17 @@ int Guloso::getVizinhosNaoDominados(No* no, set<char> conjunto_dos_dominados)
 {
     int count = 0;
 
+    // cout << "vertices do no: " << no->id << endl;
     for(Aresta* aresta : no->arestas) {
+        // cout << aresta->id_no_alvo << " ";
         if(!conjunto_dos_dominados.count(aresta->id_no_alvo)) {
             count++;
         }
+    }
+
+    if(!conjunto_dos_dominados.count(no->id)) {
+        // cout << "proprio vertice ainda nao dominado: " << no->id << endl;
+        count++;
     }
 
     return count;

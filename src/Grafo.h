@@ -78,6 +78,7 @@ public:
     bool in_direcionado;
     bool in_ponderado_aresta;
     bool in_ponderado_vertice;
+    string filename;
 
 };
 

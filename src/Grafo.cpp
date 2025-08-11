@@ -18,6 +18,8 @@ Grafo::Grafo(char *fileName)
     ifstream ifs;
     ifs.exceptions(std::ios_base::badbit);
 
+    this->filename = fileName;
+
     char relative[50] = "instancias/";
     std::string line;
     int i = 0;
