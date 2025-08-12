@@ -1,0 +1,11 @@
+ * Resultado do GRASP Reativo *
+
+Parametros:
+ - Iteracoes: 500
+ - Bloco: 10
+ - Alfas: 0.01 0.1 0.3 
+
+Resultados:
+ - Peso total: 212
+ - Tempo execucao: 2.56284 segundos
+ - Conjunto dominante: {A, B, C, G, K, j, m, r}
