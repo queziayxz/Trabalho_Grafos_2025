@@ -25,8 +25,6 @@ Os três algoritmos foram avaliados sobre **18 instâncias** (25, 40 e 60 vérti
 
 **Principal resultado:** o algoritmo Reativo obteve consistentemente as melhores soluções (menor desvio percentual médio em relação ao best), confirmando que o ajuste dinâmico de parâmetros compensa o maior custo computacional da abordagem. O Guloso puro, por sua vez, mostrou-se mais suscetível a ótimos locais, especialmente em instâncias mais densas.
 
-Detalhes completos de metodologia, parâmetros (valores de α, número de iterações, ambiente computacional) e tabelas de resultados estão no [relatório técnico do projeto](#) *(adicione aqui o link, se for compartilhar o PDF)*.
-
 ## Compilando e Executando
 
 O nome do arquivo de entrada é informado via linha de comando (`argv`).
